@@ -1,0 +1,117 @@
+{% extends "main.html" %}
+{% load static %}
+{% block content %}
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4">Money</h3>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Money Info</p>
+                            <a href="{% url 'todolist:money_view_add' %}" class="btn btn-primary btn-sm d-none d-sm-inline-block">
+                                Add new  
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div>
+                                        <form method='GET' action=''>
+                                            {{form.as_p}}
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Field</th>
+                                            <th>What</th>
+                                            {% if search_query == 'billings' %}
+                                            <th><a href="{% url 'todolist:money_view' %}?search_query=earnings" class="link-a my-custom-link">Type </a></th>
+                                            {% elif search_query == 'earnings' %}
+                                            <th><a href="{% url 'todolist:money_view' %}?search_query=billings" class="link-a my-custom-link">Type </a> </th>
+                                            {% else %}
+                                            <th><a href="{% url 'todolist:money_view' %}?search_query=earnings" class="link-a my-custom-link">Type </a> </th>
+                                            {% endif %}
+                                            <th><a href="{% url 'todolist:money_view' %}?search_query=&important_only=on" class="link-a my-custom-link">Important</a></th>
+                                            <th>Date</th>
+                                            <th>Money</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for money in page_obj  %}
+                                        <tr>
+                                            <td>{{money.field_info}}</td>
+                                            <td>{{money.what_info}}</td>
+                                            <td>{{money.type_info}}</td>
+                                            <td>
+                                                {% if money.important_info %}
+                                                    Yes
+                                                {% else %}
+                                                    No    
+                                                {% endif %}
+                                            </td>
+                                            <td>{{money.created_at}}</td>
+                                            <td>{{money.money_info}}</td>
+                                            {% endfor %}
+                                        </tr>                                       
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>                          
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 align-self-center">
+                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing {{page_obj.start_index}} to {{page_obj.end_index}} of {{page_obj.paginator.count}}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                        <ul class="pagination">
+                                            {% if page_obj.has_previous %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="{% url 'todolist:money_view' %}?page={{ page_obj.previous_page_number }}&results_per_page={{ results_per_page }}" aria-label="Previous">
+                                                        <span aria-hidden="true">«</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            {% for num in page_obj.paginator.page_range %}
+                                            {% if page_obj.number == num %}
+                                                <li class="page-item active">
+                                                    <a class="page-link" href="#">{{ num }}</a>
+                                                </li>
+                                            {% else %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="{% url 'todolist:money_view' %}?page={{ num }}&results_per_page={{ results_per_page }}">{{ num }}</a>
+                                                </li>
+                                            {% endif %}
+                                            {% endfor %}
+                                            {% if page_obj.has_next %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="{% url 'todolist:money_view' %}?page={{ page_obj.next_page_number }}&results_per_page{{ results_per_page }}" aria-label='Next'>
+                                                        <span aria-hidden="true">»</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2024</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/theme.js"></script>
+</body>
+{% endblock content %}

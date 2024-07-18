@@ -1,0 +1,17 @@
+.dashboard_link {
+  text-decoration: none;
+}
+
+.dashboard_link:hover {
+  background-color: var(--bs-border-color);
+}
+
+.fas.fa-star.star-completed {
+  color: yellow;
+}
+
+.link-a.my-custom-link {
+  text-decoration: none;
+  color: black;
+}
+

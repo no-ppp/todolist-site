@@ -1,0 +1,11 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+<form method = 'POST' active=''>
+    {% csrf_token %}
+    <input type='submit' value='Set as completed'/>
+</form>
+
+
+{% endblock content %}

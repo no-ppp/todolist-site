@@ -1,0 +1,124 @@
+{% extends "main.html" %}
+{% load static %}
+{% block content %}
+                <div class="container-fluid">
+                    <h3 class="text-primary mb-4" style="text-align: center;box-shadow: 1px 1px 9px;border-radius: 18px;">Todo List</h3>
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            <div class="card mb-3"></div>
+                            <div class="card shadow mb-4">
+                                <div class="card shadow mb-4">
+                                    <div class="card-body d-flex justify-content-center"><a href="{% url 'todolist:add_todo_with_title' user_id=user_id %}" class="btn btn-primary pulse animated" type="button" style="text-align: left;box-shadow: 1px 1px 16px var(--bs-btn-border-color);">Add Todo</a></div>
+                                    <div style="padding: 5px;margin: 5px;background: rgba(133,135,150,0);border: 1px solid rgba(133,135,150,0);border-radius: 15px;box-shadow: 1px 1px 6px rgb(0,30,255);">
+                                        <p class="align-items-center align-content-center" style="color: var(--bs-emphasis-color);font-weight: bold;font-size: 16px;margin-bottom: -3px;text-align: center;">This Month: {{ tasks_this_month_count }}<a class="float-end" href="#" style="text-decoration: none;"></a><a href="#" style="text-decoration: none;"></a></p>
+                                        <p class="align-items-center align-content-center" style="color: var(--bs-light-text-emphasis);font-weight: bold;font-size: 12px;text-align: center;margin-bottom: -1px;">Completed: {{ tasks_completed_this_month_count }}<a class="float-end" href="#" style="text-decoration: none;"></a><a href="#" style="text-decoration: none;"></a></p>
+                                        <p class="align-items-center align-content-center" style="color: var(--bs-emphasis-color);font-weight: bold;font-size: 18px;text-align: center;margin-bottom: -1px;">Overall: {{ overall_tasks }}<a class="float-end" href="#" style="text-decoration: none;"></a><a href="#" style="text-decoration: none;"></a></p>
+                                        <p class="align-items-center align-content-center" style="color: var(--bs-light-text-emphasis);font-weight: bold;font-size: 12px;text-align: center;margin-bottom: -1px;">Completed: {{ overall_tasks_completed }}<br><a href="#" style="text-decoration: none;"></a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
+                                    <div class="text-primary" style="background: var(--bs-body-bg);border-radius: 14px;box-shadow: 1px 1px 7px var(--bs-link-color);">
+                                        <h4 class="fw-bold text-primary" data-aos="zoom-in-left" data-aos-duration="300" data-aos-delay="250" style="color: rgb(133,135,150);border-radius: 14px;margin: 10px;text-align: center;font-family: Nunito, sans-serif;">Important</h4>
+                                    </div>
+                                </div>
+                                {% for important_task in important_tasks|dictsortreversed:"active" %}
+                                {% if not important_task.active %}
+                                <div data-aos="zoom-in-left" data-aos-duration="350" data-aos-delay="550" style="padding: 5px;margin: 5px;background: rgba(133,135,150,0);border: 1px solid rgba(133,135,150,0);border-radius: 15px;box-shadow: 1px 1px 5px;">           
+                                    <p class="align-items-center align-content-center" style="color: #22c232;font-weight: bold;font-size: 16px;margin-bottom: 0px;margin-top: 2px;padding: 5px;">{{ important_task.task }} (completed)<a href="{% url 'todolist:delete_task' user_id=user_id todolist_id=important_task.id %}" style="text-decoration: none;"></a><a href={% url 'todolist:delete_task' user_id=user_id todolist_id=important_task.id %} style="text-decoration: none;"><i class="fas fa-times float-end" style="font-size: 20px;"></i></a><a href={% url 'todolist:edit_task' user_id=user_id todolist_id=important_task.id %}><i class="far fa-edit" style="margin-left: 8px;color: rgb(0,65,255);"></i></a></p></p>
+                                </div>
+                                {% else %}
+                                <div data-aos="zoom-in-left" data-aos-duration="350" data-aos-delay="550" style="padding: 5px;margin: 5px;background: rgba(133,135,150,0);border: 1px solid rgba(133,135,150,0);border-radius: 15px;box-shadow: 1px 1px 5px;">
+                                    <p class="align-items-center align-content-center" style="color: #ff0000;font-weight: bold;font-size: 16px;">{{important_task.task}}<a class="float-end" href="{% url 'todolist:set_completed' user_id=user_id todolist_id=important_task.id %}" style="text-decoration: none;"><i class="fas fa-check" style="font-size: 17px;margin-left: 13px;"></i></a><a href={% url 'todolist:delete_task' user_id=user_id todolist_id=important_task.id %} style="text-decoration: none;"><i class="fas fa-times float-end" style="font-size: 20px;"></i></a><a href={% url 'todolist:edit_task' user_id=user_id todolist_id=important_task.id %}><i class="far fa-edit" style="margin-left: 8px;color: rgb(0,65,255);"></i></a></p>
+                                </div> 
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-xl-4 col-xxl-4">
+                            <div class="card mb-3"></div>
+                            <h3 class="text-primary mb-4" style="text-align: center;box-shadow: 1px 1px 9px;border-radius: 18px;">{{month}}</h3>
+                            <div class="card shadow mb-4">
+                                {% for title in titles %}
+                                
+                                <div style="padding: 5px;margin: 5px;background: rgba(133,135,150,0);border: 1px solid rgba(133,135,150,0);border-radius: 15px;box-shadow: 1px 1px 5px;">
+                                    <p class="text-primary align-items-center align-content-center" style="color: var(--bs-secondary-text-emphasis);font-weight: bold;font-size: 30px;margin-bottom: -3px;text-align: center;">{{ title.title }}<a class="float-end" href="{% url 'todolist:edit_current_task' user_id=user_id title_id=title.id%}"><i class="fas fa-plus text-primary-emphasis" data-aos="fade-down" data-aos-duration="200" data-aos-delay="200" style="color: #000000;"></i></a></p>
+                                {% for task in title.todolist_set.all %}
+                                    
+                                {% if not task.active %}
+                
+                                    <p class="align-items-center align-content-center" style="color: #22c232;font-weight: bold;font-size: 16px;margin-bottom: 0px;margin-top: 2px;padding: 5px;"><a href="{% url 'todolist:edit_task' user_id=user_id todolist_id=task.id%}"><i class="far fa-edit" style="margin-left: 8px;color: rgb(0,65,255);"></a></i>{{task.task}} (completed)<a href="{% url 'todolist:delete_task' user_id=user_id todolist_id=task.id %}" style="text-decoration: none;"><i class="fas fa-times float-end" style="font-size: 20px;"></i></a></p>
+                                    <hr style="margin-top: -1px;margin-bottom: -4px;">
+
+                                {% elif not task.important %}
+                                    
+                                    <p class="align-items-center align-content-center" data-aos="fade" data-aos-duration="100" data-aos-delay="100" style="color: var(--bs-dark-text-emphasis);font-weight: bold;font-size: 16px;margin-bottom: 0px;padding: 5px;"><a href="{% url 'todolist:edit_task' user_id=user_id todolist_id=task.id%}"><i class="far fa-edit" style="margin-left: 8px;color: rgb(0,65,255);"></a></i>{{ task.task }}<a class="float-end" href="{% url 'todolist:set_completed' user_id=user_id todolist_id=task.id %}" style="text-decoration: none;"><i class="fas fa-check" style="font-size: 17px;margin-left: 13px;"></i></a><a href="{% url 'todolist:delete_task' user_id=user_id todolist_id=task.id %}" style="text-decoration: none;"><i class="fas fa-times float-end" style="font-size: 20px;"></i></a></p>
+                                    <hr style="margin-top: -1px;margin-bottom: -4px;">
+                                    
+                                {% else %}
+                                    
+                                    <p class="align-items-center align-content-center" data-aos="fade" data-aos-duration="100" data-aos-delay="100" style="color: #ff0000;font-weight: bold;font-size: 16px;margin-bottom: 0px;padding: 5px;"><a href=""><i class="far fa-edit" style="margin-left: 8px;color: rgb(0,65,255);"></a></i>{{task.task}}<a class="float-end" href="{% url 'todolist:set_completed' user_id=user_id todolist_id=task.id %}" style="text-decoration: none;"><i class="fas fa-check" style="font-size: 17px;margin-left: 13px;"></i></a><a href="{% url 'todolist:delete_task' user_id=user_id todolist_id=task.id %}" style="text-decoration: none;"><i class="fas fa-times float-end" style="font-size: 20px;"></i></a></p>
+                                    <hr style="margin-top: -1px;margin-bottom: -4px;">
+
+                                {% endif %}
+                                    
+                                {% endfor %}
+
+                                </div>
+                                {% endfor %}
+                                
+                            </div>
+                            
+                            
+                        </div>
+                        <div class="col-lg-8 col-xl-4 col-xxl-4">
+                            <div class="card mb-3"></div>
+                            <h3 class="text-primary mb-4" style="text-align: center;box-shadow: 1px 1px 9px;border-radius: 18px;">Overview</h3>
+                            <div class="card shadow mb-4">
+                                    <div class="card-header d-flex"><a class="dashboard_link" href="{% url 'todolist:money_view' %}">
+                                            <h6 class="text-primary fw-bold m-0">Costs</h6>
+                                        </a>
+                                        <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                            <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                                <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                                <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-area" style="--bs-primary: rgb(46,45,136);--bs-primary-rgb: 46,45,136;"><canvas data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Direct&quot;,&quot;Social&quot;,&quot;Referral&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;,&quot;#36b9cc&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;50&quot;,&quot;30&quot;,&quot;15&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}}}"></canvas></div>
+                                        <div class="text-center small mt-4"><span class="me-2"><i class="fas fa-circle text-primary"></i>&nbsp;Direct</span><span class="me-2"><i class="fas fa-circle text-success"></i>&nbsp;Social</span><span class="me-2"><i class="fas fa-circle text-info"></i>&nbsp;Refferal</span></div>
+                                </div>
+                            </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header d-flex justify-content-between align-items-center"><a class="dashboard_link" href="{% url 'todolist:money_view' %}">
+                                    <h6 class="text-primary fw-bold m-0">Money Overview</h6>
+                                </a>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area" style="--bs-primary: #717171;--bs-primary-rgb: 113,113,113;--bs-secondary: #858796;--bs-secondary-rgb: 133,135,150;"><canvas data-bss-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Earnings&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;0&quot;,&quot;10000&quot;,&quot;5000&quot;,&quot;15000&quot;,&quot;10000&quot;,&quot;20000&quot;,&quot;15000&quot;,&quot;25000&quot;],&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;fontStyle&quot;:&quot;normal&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;fontStyle&quot;:&quot;normal&quot;,&quot;padding&quot;:20}}]}}}"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2024</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/aos.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/theme.js"></script>
+</body>
+{% endblock %}
