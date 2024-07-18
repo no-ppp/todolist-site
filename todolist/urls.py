@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 
@@ -19,3 +21,4 @@ urlpatterns = [
     path('edit_task/<int:user_id>/<int:todolist_id>', views.edit_task, name='edit_task'),
     path('edit_current_task/<int:user_id>/<int:title_id>/', views.edit_current_task, name='edit_current_task')
 ]
+

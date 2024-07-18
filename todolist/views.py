@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 from django.utils.timezone import make_aware
 from datetime import datetime, date, timedelta
+from .matplotlib_view import generate_plot, generate_pie
+import calendar
+
 
 
 
@@ -53,6 +56,34 @@ def todo_view(request, user_id):
     #taking the important task
     important_tasks = todolist.filter(important=True)
 
+    '''matplotlib'''
+    #Chart about how many tasks did user completed each day
+    #First value : month range
+    num_days = calendar.monthrange(today.year, today.month)[1] 
+    #Second value : task completed each day
+    #Wrapped it into for iiteration to iterate over every single day of month and see
+    #how many task each day were completed
+    task_count = []
+    for day in range(1, num_days +1):
+        start_of_day = datetime(today.year, today.month, day, 0, 0, 0)
+        end_of_day = datetime(today.year, today.month, day, 23, 59, 59)
+        active_changes = TodoList.objects.filter(
+            active=False,
+            updated_at__gte = start_of_day,
+            updated_at__lte = end_of_day,
+
+        ).count()
+        task_count.append(active_changes)
+    plot_path = generate_plot(range(1,num_days+1),
+                               task_count,
+                                 'Tasks completed',
+                                 '',
+                                 'Days','Tasks')
+    #generating plt_pie from matplotlib_view.py
+    active = TodoList.objects.filter(active=True).count()
+    not_active = TodoList.objects.filter(active=False).count()
+    plot_path_pie = generate_pie(active, not_active)
+
     context = {
         'month' : month,
         'todolist' : todolist,
@@ -63,7 +94,9 @@ def todo_view(request, user_id):
         'overall_tasks' : overall_tasks,
         'overall_tasks_completed' : overall_tasks_completed,
         'important_tasks' : important_tasks,
-        'titles' : titles
+        'titles' : titles,
+        'plot_path' : plot_path,
+        'plot_path_pie' : plot_path_pie
     }
     return render(request,'todo_view.html', context)
 
