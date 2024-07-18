@@ -84,31 +84,31 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <img src="{{ MEDIA_URL }}wykres.png" alt="Wykres" style="max-width: 100%; height: auto;"> </img>
+                                    <img src="data:image/png;base64,{{ plot_path }}" alt="Wykres" style="max-width: 100%; height: auto;"> </img>
                                 </div>
                             </div>
                             <div class="card mb-3"></div>
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex">
-                                        <h6 class="text-primary fw-bold m-0">Todo Chart</h6>
+                                        <h6 class="text-primary fw-bold m-0">Completed/Active</h6>
                                     <div class="dropdown no-arrow">
                                         
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <img src="{{ MEDIA_URL }}wykres_pie.png" alt="Wykres" style="max-width: 100%; height: auto;"> </img>
+                                    <img src="data:image/png;base64,{{ plot_path_pie }}" style="max-width: 100%; height: auto;"> </img>
                                 </div>
                             </div>
                             <div class="card mb-3"></div>
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex">
-                                        <h6 class="text-primary fw-bold m-0">Todo Chart</h6>
+                                        <h6 class="text-primary fw-bold m-0">Overall Tasks grouped</h6>
                                     <div class="dropdown no-arrow">
                                         
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <img src="{{ MEDIA_URL }}wykres.png" alt="Wykres" style="max-width: 100%; height: auto;"> </img>
+                                    <img src="data:image/png;base64,{{ plot_path_pie_task }}" alt="Wykres" style="max-width: 100%; height: auto;"> </img>
                                 </div>
                             </div>
                         </div>
@@ -117,7 +117,7 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2024</span></div>
+                    <div class="text-center my-auto copyright"><span>Copyright © no-ppp 2024</span></div>
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>

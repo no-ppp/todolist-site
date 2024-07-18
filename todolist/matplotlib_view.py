@@ -1,8 +1,22 @@
 import matplotlib.pyplot as plt
-import seaborn as sns
+import numpy as np
+import base64
+import io
+
+
+def convert_plot_to_base64(fig):
+    buffer = io.BytesIO()
+    fig.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    graph = base64.b64encode(image_png)
+    graph = graph.decode('utf-8')
+    buffer.close()
+    return graph
 
 def generate_plot(x, y, label: str, title: str, xlabel: str, ylabel: str):
     # Create a figure and axis
+    plt.switch_backend('AGG')
     fig, ax = plt.subplots(figsize=(10, 6))
 
     # Bar plot with custom colors
@@ -44,28 +58,35 @@ def generate_plot(x, y, label: str, title: str, xlabel: str, ylabel: str):
                     textcoords="offset points",
                     ha='center', va='bottom', fontsize=12, color='#4A90E2')
 
-    # Saving the plot
-    plot_path = 'media/wykres.png'
-    plt.savefig(plot_path, bbox_inches='tight', facecolor=fig.get_facecolor(), 
-                edgecolor='none')
-    plt.close()
-    return plot_path
+    # converting the plot to base 64
+    converted_plot = convert_plot_to_base64(fig)
+    return converted_plot
 
 
 def generate_pie(active, not_active):
+    plt.switch_backend('AGG')
     plt.figure(figsize=(8, 6))
     sizes = [active, not_active]
     labels = ['Active Tasks', 'Completed Tasks']
-    colors = ['#3498db', '#4CAF50']  # Niebieski i biały
+    colors = ['#3498db', '#4CAF50']  # White, Green
     plt.pie(sizes, explode=(0.1, 0), labels=labels, colors=colors,
             autopct='%1.1f%%', shadow=True, startangle=140)
-    plt.axis('equal')  # Utrzymanie koła
-    # Ścieżka do pliku PNG
-    plot_path = 'media/wykres_pie.png'
-    # Zapis wykresu
-    plt.savefig(plot_path)
-    # Zamknięcie obiektu plt
-    plt.close()
-    return plot_path
+    plt.axis('equal')  
+    #Converting the plot to Base64
+    converted_plot = convert_plot_to_base64(plt)
+    return converted_plot
+
+def generate_pie_task(title_task_count, titles):
+    plt.switch_backend('AGG')
+    plt.figure(figsize=(8,6))
+    len_titles = len(titles)
+    colors = plt.cm.tab20(np.random.rand(len_titles))
+    explode = [0.1] * len_titles
+    plt.pie(title_task_count, explode=explode, labels=titles, colors=colors,
+            autopct='%1.1f%%', shadow=True, startangle=140)
+    plt.axis('equal')  
+    #Converting the plot to Base64
+    converted_plot = convert_plot_to_base64(plt)
+    return converted_plot
 
 
