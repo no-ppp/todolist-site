@@ -10,6 +10,7 @@
                             <div class="card shadow mb-4">
                                 <div class="card shadow mb-4">
                                     <div class="card-body d-flex justify-content-center"><a href="{% url 'todolist:add_todo_with_title' user_id=user_id %}" class="btn btn-primary pulse animated" type="button" style="text-align: left;box-shadow: 1px 1px 16px var(--bs-btn-border-color);">Add Todo</a></div>
+                                    <div class="card-body d-flex justify-content-center"><a href="{% url 'todolist:add_title_todo' user_id=user_id %}" class="btn btn-primary pulse animated" type="button" style="text-align: left;box-shadow: 1px 1px 16px var(--bs-btn-border-color);">Add Title</a></div>
                                     <div style="padding: 5px;margin: 5px;background: rgba(133,135,150,0);border: 1px solid rgba(133,135,150,0);border-radius: 15px;box-shadow: 1px 1px 6px rgb(0,30,255);">
                                         <p class="align-items-center align-content-center" style="color: var(--bs-emphasis-color);font-weight: bold;font-size: 16px;margin-bottom: -3px;text-align: center;">This Month: {{ tasks_this_month_count }}<a class="float-end" href="#" style="text-decoration: none;"></a><a href="#" style="text-decoration: none;"></a></p>
                                         <p class="align-items-center align-content-center" style="color: var(--bs-light-text-emphasis);font-weight: bold;font-size: 12px;text-align: center;margin-bottom: -1px;">Completed: {{ tasks_completed_this_month_count }}<a class="float-end" href="#" style="text-decoration: none;"></a><a href="#" style="text-decoration: none;"></a></p>
@@ -41,11 +42,12 @@
                             <div class="card mb-3"></div>
                             <h3 class="text-primary mb-4" style="text-align: center;box-shadow: 1px 1px 9px;border-radius: 18px;">{{month}}</h3>
                             <div class="card shadow mb-4">
-                                {% for title in titles %}
+                                {% for title, tasks in title_task_map.items %}
                                 
                                 <div style="padding: 5px;margin: 5px;background: rgba(133,135,150,0);border: 1px solid rgba(133,135,150,0);border-radius: 15px;box-shadow: 1px 1px 5px;">
+                                    
                                     <p class="text-primary align-items-center align-content-center" style="color: var(--bs-secondary-text-emphasis);font-weight: bold;font-size: 30px;margin-bottom: -3px;text-align: center;">{{ title.title }}<a class="float-end" href="{% url 'todolist:edit_current_task' user_id=user_id title_id=title.id%}"><i class="fas fa-plus text-primary-emphasis" data-aos="fade-down" data-aos-duration="200" data-aos-delay="200" style="color: #000000;"></i></a></p>
-                                {% for task in title.todolist_set.all %}
+                                    {% for task in tasks %}
                                     
                                 {% if not task.active %}
                 

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import MoneyForm, MoneySearch, EditTodo, IsActive, AddTitle
+from .forms import MoneyForm, MoneySearch, EditTodoForm, IsActive, AddTitleForm, UserLoginForm, TodoTitleForm
 from .models import Money, TodoList, TitleTodo
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -9,17 +9,35 @@ from datetime import datetime, date, timedelta
 from .matplotlib_view import generate_plot, generate_pie, generate_pie_task
 from django.utils.timezone import timezone
 import calendar
+from django.contrib.auth import login as auth_login, authenticate 
 
 
 
 
 
 def home(request):
+    
     return render(request,'home.html')
 
 
-def login(request):
-    return render(request,'login.html')
+def login_view(request):
+    user_form = UserLoginForm()
+    if request.method == 'POST':
+        user_form = UserLoginForm(request.POST)
+        if user_form.is_valid():
+            email = user_form.cleaned_data['email']
+            password = user_form.cleaned_data['password']
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                auth_login(request, user)
+                return redirect('todolist:home')
+            else:
+                user_form.add_error(None, 'Failed to login')
+    context = {
+        'user_form' : user_form
+    }
+
+    return render(request,'login.html', context)
 
 
 def register(request):
@@ -39,6 +57,10 @@ def todo_view(request, user_id):
     #filtering the todolist from user_id
     todolist = TodoList.objects.filter(user_id=user_id)
     titles = TitleTodo.objects.filter(todolist__user_id=user_id).distinct()
+    title_task_map = {}
+    for title in titles:
+        task = todolist.filter(title=title)
+        title_task_map[title] = task
     #showing current month 
     month = datetime.now().strftime('%B')  
     #Making the start day and the end day of the month
@@ -81,8 +103,8 @@ def todo_view(request, user_id):
                                  '',
                                  'Days','Tasks')
     #generating plt_pie from matplotlib_view.py
-    active = TodoList.objects.filter(active=True).count()
-    not_active = TodoList.objects.filter(active=False).count()
+    active = todolist.filter(active=True).count()
+    not_active = todolist.filter(active=False).count()
     plot_path_pie = generate_pie(active, not_active)
     #generating plt_pie_task from matplotlib_view.py
     title_task_count = []
@@ -92,6 +114,7 @@ def todo_view(request, user_id):
     plot_path_pie_task = generate_pie_task(title_task_count, titles)
 
     context = {
+        'title_task_map' : title_task_map,
         'month' : month,
         'todolist' : todolist,
         'tasks_this_month' : tasks_this_month,
@@ -109,13 +132,28 @@ def todo_view(request, user_id):
     }
     return render(request,'todo_view.html', context)
 
+def add_title_todo(request, user_id):
+    form = TodoTitleForm()
+    if request.method == 'POST':
+        form = TodoTitleForm(request.POST, user=request.user)
+        if form.is_valid():
+            title_form = form.save(commit=False)
+            title_form.user = request.user
+            title_form.save()
+            return redirect('todolist:todo_view', user_id)
+    context = { 
+        'form': form
+    }
+    return render(request, 'add_todo_title.html', context)
+
+
 
 def add_todo_with_title(request, user_id):
-    form = EditTodo()
-    add_title = AddTitle()
+    form = EditTodoForm()
+    add_title = AddTitleForm(user=request.user)
     if request.method == 'POST':
-        form = EditTodo(data=request.POST)
-        add_title = AddTitle(data=request.POST)
+        form = EditTodoForm(data=request.POST)
+        add_title = AddTitleForm(data=request.POST, user=request.user)
         if form.is_valid() and add_title.is_valid() :
             title_instance = add_title.cleaned_data['title']
             todo_instance = form.save(commit=False)
@@ -132,10 +170,10 @@ def add_todo_with_title(request, user_id):
 
 def edit_task(request, user_id, todolist_id):
     task = get_object_or_404(TodoList, id=todolist_id)
-    form = EditTodo(instance=task)
+    form = EditTodoForm(instance=task)
     is_active = IsActive(instance=task)
     if request.method == 'POST':
-        form = EditTodo(instance=task, data=request.POST)
+        form = EditTodoForm(instance=task, data=request.POST)
         is_active = IsActive(instance=task, data=request.POST)
         if form.is_valid() and is_active.is_valid():
             form.save()
@@ -162,10 +200,10 @@ def delete_task(request, user_id, todolist_id):
 
 
 def edit_current_task(request, user_id,title_id,):
-    form = EditTodo()
+    form = EditTodoForm()
     title_instance = get_object_or_404(TitleTodo, pk =title_id)
     if request.method == 'POST':
-        form = EditTodo(request.POST)
+        form = EditTodoForm(request.POST)
         if form.is_valid():
             new_task = form.save(commit=False)
             new_task.title = title_instance

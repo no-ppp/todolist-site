@@ -1,5 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    name = models.CharField(max_length=30)
+    email = models.EmailField(unique=True)
+    bio = models.TextField(null=True,blank=True)
+    avatar = models.ImageField(null=True, default="Avatarwander.png")
 
 
 class Money(models.Model):
@@ -19,7 +25,10 @@ class Money(models.Model):
     
 
 class TitleTodo(models.Model):
-    title = models.CharField(max_length=30)    
+    title = models.CharField(max_length=30)   
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    class Meta:
+        unique_together = ('title', 'user')
 
     def __str__(self) -> str:
         return self.title
