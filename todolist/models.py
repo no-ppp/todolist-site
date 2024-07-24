@@ -1,11 +1,19 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     name = models.CharField(max_length=30)
     email = models.EmailField(unique=True)
-    bio = models.TextField(null=True,blank=True)
+    is_active = models.BooleanField(default=False)
+    activation_token = models.CharField(max_length=36, unique=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
     avatar = models.ImageField(null=True, default="Avatarwander.png")
+
+    def save(self, *args, **kwargs):
+        if not self.activation_token:
+            self.activation_token = uuid.uuid4().hex
+        super().save(*args, **kwargs)
 
 
 class Money(models.Model):

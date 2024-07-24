@@ -5,14 +5,14 @@ from .models import User, Money, TodoList, TitleTodo
 
 class UserAdminPanel(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'name', 'bio', 'avatar', 'password')}),
+        (None, {'fields': ('username', 'email', 'name', 'bio', 'avatar', 'password', 'activation_token')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'name', 'bio', 'avatar', 'password1', 'password2'),
+            'fields': ('username', 'email', 'name', 'bio', 'avatar', 'password1', 'password2', 'activation_token'),
         }),
     )
 

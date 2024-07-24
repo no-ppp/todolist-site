@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import MoneyForm, MoneySearch, EditTodoForm, IsActive, AddTitleForm, UserLoginForm, TodoTitleForm
-from .models import Money, TodoList, TitleTodo
+from .models import Money, TodoList, TitleTodo, User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
@@ -9,19 +9,22 @@ from datetime import datetime, date, timedelta
 from .matplotlib_view import generate_plot, generate_pie, generate_pie_task
 from django.utils.timezone import timezone
 import calendar
-from django.contrib.auth import login as auth_login, authenticate 
+from django.contrib.auth import login as auth_login, authenticate , get_user_model, logout
 from django.http import HttpResponse
-from Google import main
+from Google import create_message, send_message, sending_message
 from django.conf import settings
 
 
 
 
+def overview_site(request):
+
+    return render(request, 'overview_site.html')
 
 
 def home(request):
     
-    return render(request,'home.html')
+    return render(request, 'home.html')
 
 
 def login_view(request):
@@ -44,11 +47,21 @@ def login_view(request):
     return render(request,'login.html', context)
 
 
-def send_email(request):
-    main()
-    return render(request, 'send_mail.html')
+def logout_view(request):
+    logout(request)
+    return redirect('todolist:overview_site')
 
 
+
+def activation_user(request, token):
+    User = get_user_model()
+    user = get_object_or_404(User, activation_token=token)
+    if user.is_active:
+        return HttpResponse(f"{user} already activated")
+    user.is_active = True
+    user.activation_token = ''
+    user.save()
+    return HttpResponse('Account activated Succesfully')
 
 
 def register(request):

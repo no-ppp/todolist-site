@@ -5,12 +5,14 @@ import os
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from googleapiclient.errors import HttpError
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Get credentials from environment variables
+# Get credentials from environment variables (not used here, but good practice)
 CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 
@@ -19,16 +21,17 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
 def get_service():
     creds = None
+    # Load credentials from token file
     if os.path.exists('token.json'):
-        with open('token.json', 'r') as token:
-            creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    # Refresh or obtain new credentials if needed
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
                 os.path.join(BASE_DIR, 'credentials.json'), SCOPES)
-            creds = flow.run_local_server(port=8001)
+            creds = flow.run_local_server(port=8080)
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
     service = build('gmail', 'v1', credentials=creds)
@@ -51,19 +54,8 @@ def send_message(service, user_id, message):
     except HttpError as error:
         print(f'An error occurred: {error}')
 
-def sendingMessage(sender, recipient, subject, message_text):
+def sending_message(sender, to, subject, message_text):
     service = get_service()
     user_id = 'me'
-    message = create_message(sender, recipient, subject, message_text)
+    message = create_message(sender, to, subject, message_text)
     send_message(service, user_id, message)
-
-def main():
-    sendingMessage(
-        sender='your-email@gmail.com',
-        recipient='recipient-email@example.com',
-        subject='Test Email',
-        message_text='This is a test email sent from the Gmail API.'
-    )
-
-if __name__ == "__main__":
-    main()

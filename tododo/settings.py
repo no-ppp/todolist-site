@@ -112,3 +112,6 @@ AUTHENTICATION_BACKENDS = [
     'todolist.auth_backends.EmailBackend',  
     'django.contrib.auth.backends.ModelBackend',  
 ]
+
+DEFAULT_FROM_EMAIL = 'todolist.service.auth@gmail.com'
+SITE_URL = 'http://127.0.0.1:8000/'
