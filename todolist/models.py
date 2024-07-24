@@ -44,4 +44,4 @@ class TodoList(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"{self.task} - {self.important} - {self.active}"
+        return f"{self.task} - {self.important} - {self.active} - {self.user}"

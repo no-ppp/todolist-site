@@ -7,8 +7,9 @@ from django.core.exceptions import ValidationError
 
 
 class UserLoginForm(forms.Form):
-    email = forms.EmailField(label='Email')
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
 
 class MoneyForm(forms.ModelForm):
     class Meta:

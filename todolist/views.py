@@ -10,6 +10,10 @@ from .matplotlib_view import generate_plot, generate_pie, generate_pie_task
 from django.utils.timezone import timezone
 import calendar
 from django.contrib.auth import login as auth_login, authenticate 
+from django.http import HttpResponse
+from Google import main
+from django.conf import settings
+
 
 
 
@@ -38,6 +42,13 @@ def login_view(request):
     }
 
     return render(request,'login.html', context)
+
+
+def send_email(request):
+    main()
+    return render(request, 'send_mail.html')
+
+
 
 
 def register(request):

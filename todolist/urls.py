@@ -20,6 +20,7 @@ urlpatterns = [
     path('delete_task/<int:user_id>/<int:todolist_id>/', views.delete_task, name='delete_task'),
     path('set_completed/<int:user_id>/<int:todolist_id>/', views.set_completed, name='set_completed'),
     path('edit_task/<int:user_id>/<int:todolist_id>', views.edit_task, name='edit_task'),
-    path('edit_current_task/<int:user_id>/<int:title_id>/', views.edit_current_task, name='edit_current_task')
+    path('edit_current_task/<int:user_id>/<int:title_id>/', views.edit_current_task, name='edit_current_task'),
+    path('send_email/', views.send_email, name='send_email')
 ]
 

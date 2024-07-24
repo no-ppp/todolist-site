@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
+from gmailapi.views import OAuth2CallbackView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('todolist.urls'))
+    path('', include('todolist.urls')),
+    path('oauth2callback/', OAuth2CallbackView.as_view(), name='oauth2callback'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

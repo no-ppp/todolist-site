@@ -1,0 +1,15 @@
+<!-- templates/send_email.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send Email</title>
+</head>
+<body>
+    <h1>Send Test Email</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Send Email</button>
+    </form>
+</body>
+</html>
