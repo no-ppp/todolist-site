@@ -63,6 +63,7 @@ def profile_settings(request):
     return render(request, 'profile_settings.html')
 
 #TODO ADD JAVASCRIPT TO SHOW THE MATPLOTLIB FILES
+#TODO ADD SIGNAL TO ADD NEW NOTE EVERY TIME USER DELETE ALL NOTES SO MATPLOTLIB WORK
 @login_required()
 def todo_view(request, user_id):
     #filtering the todolist from user_id
