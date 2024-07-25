@@ -5,6 +5,9 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 
 
+class EmailForm(forms.Form):
+    email = forms.EmailField()
+
 
 class UserLoginForm(forms.Form):
     email = forms.EmailField()

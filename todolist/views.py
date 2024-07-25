@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import MoneyForm, MoneySearch, EditTodoForm, IsActive, AddTitleForm, UserLoginForm, TodoTitleForm, UserRegisterForm
+from .forms import MoneyForm, MoneySearch, EditTodoForm, IsActive, AddTitleForm, UserLoginForm
+from .forms import  TodoTitleForm, UserRegisterForm, EmailForm
 from .models import Money, TodoList, TitleTodo, User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -13,6 +14,9 @@ from django.contrib.auth import login as auth_login, authenticate , get_user_mod
 from django.http import HttpResponse
 from Google import create_message, send_message, sending_message
 from django.conf import settings
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
 
 
@@ -67,7 +71,7 @@ def register_view(request):
     context = {
         'register_form' : register_form
     }
-    return render(request, 'register.html', context)
+    return render(request, 'registration/register.html', context)
 
 
 def register_completed(request):
@@ -76,7 +80,40 @@ def register_completed(request):
     elif request.user.is_active == True:
         return redirect('todolist:dashboard')
     elif request.user.is_active == False:
-        return render(request, 'register_completed.html')
+        return render(request, 'registration/register_completed.html')
+    
+
+#TODO display the user email after reset password is sent
+def password_reset_done(request):
+    return render(request, 'registration/password_reset_done.html')
+
+
+#TODO Refactor this function to utils.py
+def password_reset(request):
+    email_form = EmailForm()
+    if request.method == 'POST':
+        email_form = EmailForm(request.POST)
+        email = request.POST['email']
+        user_email = User.objects.filter(email=email)
+        if user_email.exists():
+            for user in user_email:
+                sender = settings.DEFAULT_FROM_EMAIL
+                token = default_token_generator.make_token(user)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                reset_url = f'{settings.SITE_URL}/reset_password_email/{uid}/{token}/'
+                message = f'Hello dear {user.username}'
+                f'here is your link to reset your password'
+                f'\n {reset_url}'
+                to = user.email
+                subject = 'Reset Password'
+                sending_message(
+                    sender,
+                    to,
+                    subject,
+                    message
+                )
+        return redirect("todolist:password_reset_done")
+    return render(request, "registration/password_reset_form.html", {'email_form' : email_form})
 
 
 def logout_view(request):
@@ -84,18 +121,14 @@ def logout_view(request):
     return redirect('todolist:home')
 
 
-
 def activation_user(request, token):
     User = get_user_model()
     user = get_object_or_404(User, activation_token=token)
     if user.is_active:
-        return render(request, 'activated_user.html' , {'user' : user})
+        return render(request, 'registration/activated_user.html' , {'user' : user})
     user.is_active = True
     user.save()
-    return render(request, 'activeted_user.html', {'user' : user})
-
-def register(request):
-    return render(request,'register.html')
+    return render(request, 'registration/activated_user.html', {'user' : user})
 
 
 def profile(request):
