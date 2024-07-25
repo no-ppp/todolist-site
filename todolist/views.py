@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import MoneyForm, MoneySearch, EditTodoForm, IsActive, AddTitleForm, UserLoginForm, TodoTitleForm
+from .forms import MoneyForm, MoneySearch, EditTodoForm, IsActive, AddTitleForm, UserLoginForm, TodoTitleForm, UserRegisterForm
 from .models import Money, TodoList, TitleTodo, User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -17,14 +17,20 @@ from django.conf import settings
 
 
 
-def overview_site(request):
 
-    return render(request, 'overview_site.html')
 
 
 def home(request):
+    if request.user.is_authenticated:
+        return redirect('todolist:dashboard')
     
     return render(request, 'home.html')
+
+
+def dashboard(request):
+
+    return render(request, 'dashboard.html')
+
 
 
 def login_view(request):
@@ -47,9 +53,35 @@ def login_view(request):
     return render(request,'login.html', context)
 
 
+def register_view(request):
+    register_form = UserRegisterForm()
+    if request.method == 'POST':
+        register_form = UserRegisterForm(request.POST)
+        if register_form.is_valid():
+            user = register_form.save()
+            password = register_form.cleaned_data['password1']
+            user = authenticate(email=user.email, password=password)
+            if user is not None:
+                auth_login(request, user)
+            return redirect('todolist:register_completed')
+    context = {
+        'register_form' : register_form
+    }
+    return render(request, 'register.html', context)
+
+
+def register_completed(request):
+    if not request.user.is_authenticated:
+        return redirect('todolist:home')
+    elif request.user.is_active == True:
+        return redirect('todolist:dashboard')
+    elif request.user.is_active == False:
+        return render(request, 'register_completed.html')
+
+
 def logout_view(request):
     logout(request)
-    return redirect('todolist:overview_site')
+    return redirect('todolist:home')
 
 
 
@@ -57,12 +89,10 @@ def activation_user(request, token):
     User = get_user_model()
     user = get_object_or_404(User, activation_token=token)
     if user.is_active:
-        return HttpResponse(f"{user} already activated")
+        return render(request, 'activated_user.html' , {'user' : user})
     user.is_active = True
-    user.activation_token = ''
     user.save()
-    return HttpResponse('Account activated Succesfully')
-
+    return render(request, 'activeted_user.html', {'user' : user})
 
 def register(request):
     return render(request,'register.html')

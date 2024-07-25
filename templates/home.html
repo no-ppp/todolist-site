@@ -1,19 +1,44 @@
-{% extends "main.html" %}
+<html data-bs-theme="light" lang="en">
 {% load static %}
-{% block content %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard - Brand</title>
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Akaya+Kanadaka&amp;display=swap">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static "css/untitled.css" %}">
+</head>
 
-<body>
+<body id="page-top">
+    <nav class="navbar navbar-expand-md bg-body py-3">
+        <div class="container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" style="font-size: 35px;">
+                <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
+                <path d="M152.1 38.2c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 113C-2.3 103.6-2.3 88.4 7 79s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zm0 160c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 273c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zM224 96c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H256c-17.7 0-32-14.3-32-32zm0 160c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H256c-17.7 0-32-14.3-32-32zM160 416c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H192c-17.7 0-32-14.3-32-32zM48 368a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"></path>
+            </svg><a class="navbar-brand d-flex align-items-center" href="#"><span style="font-family: 'Akaya Kanadaka', serif;font-size: 20px;">TODODO</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-2"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-2">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'todolist:login' %}">Login</a></li>
+                    <li class="nav-item"></li>
+                </ul><a class="btn btn-primary ms-md-2" role="button" href="{% url 'todolist:register' %}">Register</a>
+            </div>
+        </div>
+    </nav>
+    <div id="wrapper">
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-dark mb-0">Dashboard</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="#" style="background: rgb(46,45,136);"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Generate Report</a>
+                        <h1 class="display-6 fw-bolder text-info mb-0" style="margin: 0 auto;">Create your own todo menager</h1>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 col-xl-3 mb-4"><a class="dashboard_link" href="#">
+                        <div class="col-md-6 col-xl-3 mb-4">
                                 <div class="card shadow border-left-primary py-2">
                                     <div class="card-body">
                                         <div class="row g-0 align-items-center">
                                             <div class="col me-2">
-                                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Earnings (monthly)</span></div>
+                                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Check your monthly earnings&nbsp;</span></div>
                                                 <div class="text-dark fw-bold h5 mb-0"><span>$40,000</span></div>
                                             </div>
                                             <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
@@ -21,12 +46,12 @@
                                     </div>
                                 </div>
                             </a></div>
-                        <div class="col-md-6 col-xl-3 mb-4"><a class="dashboard_link" href="#">
+                        <div class="col-md-6 col-xl-3 mb-4">
                                 <div class="card shadow border-left-success py-2">
                                     <div class="card-body">
                                         <div class="row g-0 align-items-center">
                                             <div class="col me-2">
-                                                <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>REAL EARNINGS</span></div>
+                                                <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Check your real earnings</span></div>
                                                 <div class="text-dark fw-bold h5 mb-0"><span>$215,000</span></div>
                                             </div>
                                             <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
@@ -34,12 +59,12 @@
                                     </div>
                                 </div>
                             </a></div>
-                        <div class="col-md-6 col-xl-3 mb-4"><a class="dashboard_link" href="#">
+                        <div class="col-md-6 col-xl-3 mb-4">
                                 <div class="card shadow border-left-info py-2">
                                     <div class="card-body">
                                         <div class="row g-0 align-items-center">
                                             <div class="col me-2">
-                                                <div class="text-uppercase text-info fw-bold text-xs mb-1"><span>Tasks</span></div>
+                                                <div class="text-uppercase text-info fw-bold text-xs mb-1"><span>Check your Tasks completed each day !</span></div>
                                                 <div class="row g-0 align-items-center">
                                                     <div class="col-auto">
                                                         <div class="text-dark fw-bold h5 mb-0 me-3"><span>50%</span></div>
@@ -56,12 +81,12 @@
                                     </div>
                                 </div>
                             </a></div>
-                        <div class="col-md-6 col-xl-3 mb-4"><a class="dashboard_link" href="#">
+                        <div class="col-md-6 col-xl-3 mb-4">
                                 <div class="card shadow border-left-warning py-2">
                                     <div class="card-body">
                                         <div class="row g-0 align-items-center">
                                             <div class="col me-2">
-                                                <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Pending Requests</span></div>
+                                                <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Add friends and let them help with your tasks !</span></div>
                                                 <div class="text-dark fw-bold h5 mb-0"><span>18</span></div>
                                             </div>
                                             <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
@@ -73,12 +98,12 @@
                     <div class="row">
                         <div class="col-lg-7 col-xl-8">
                             <div class="card shadow mb-4">
-                                <div class="card-header d-flex justify-content-between align-items-center"><a class="dashboard_link" href="{% url 'todolist:money_view' %}">
-                                        <h6 class="text-primary fw-bold m-0">Money Overview</h6>
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="text-primary fw-bold m-0">Check your Money overview in simple charts !</h6>
                                     </a>
                                     <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                         <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                            <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                            <p class="text-center dropdown-header">dropdown header:</p>
                                             <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a>
                                         </div>
                                     </div>
@@ -88,65 +113,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-5 col-xl-4">
-                            <div class="card shadow mb-4">
-                                <div class="card-header d-flex justify-content-between align-items-center"><a class="dashboard_link" href="{% url 'todolist:money_view' %}">
-                                        <h6 class="text-primary fw-bold m-0">Costs</h6>
-                                    </a>
-                                    <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
-                                        <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                            <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
-                                            <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-area" style="--bs-primary: rgb(46,45,136);--bs-primary-rgb: 46,45,136;"><canvas data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Direct&quot;,&quot;Social&quot;,&quot;Referral&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;,&quot;#36b9cc&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;50&quot;,&quot;30&quot;,&quot;15&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}}}"></canvas></div>
-                                    <div class="text-center small mt-4"><span class="me-2"><i class="fas fa-circle text-primary"></i>&nbsp;Direct</span><span class="me-2"><i class="fas fa-circle text-success"></i>&nbsp;Social</span><span class="me-2"><i class="fas fa-circle text-info"></i>&nbsp;Refferal</span></div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="col-lg-5 col-xl-4"><img class="img-fluid" src="{% static 'images/important_tasks.png' %}"></div>
                     </div>
                     <div class="row">
                         <div class="col-lg-6 mb-4">
+                            <div class="card shadow mb-4"></div>
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3"><a class="dashboard_link" href="#">
-                                        <h6 class="text-primary fw-bold m-0">Overview</h6>
-                                    </a></div>
-                                <div class="card-body">
-                                    <h4 class="small fw-bold">Bills<span class="float-end">20%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"><span class="visually-hidden">20%</span></div>
+                                <div class="card-header py-3">
+                                        <h6 class="text-primary fw-bold m-0">Make friends and share tasks with them !</h6>
                                     </div>
-                                    <h4 class="small fw-bold">Important Tasks<span class="float-end">40%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;"><span class="visually-hidden">40%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Tasks<span class="float-end">60%</span></h4>
-                                    <div class="progress mb-4" style="color: rgb(46,45,136);">
-                                        <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"><span class="visually-hidden">60%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Earnings<span class="float-end">80%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;"><span class="visually-hidden">80%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Account setup<span class="float-end">Complete!</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"><span class="visually-hidden">100%</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3"><a class="dashboard_link" href="#">
-                                        <h6 class="text-primary fw-bold m-0">Friends Request</h6>
-                                    </a></div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
                                         <div class="row g-0 align-items-center">
                                             <div class="col me-2">
                                                 <h6 class="mb-0"><strong>Wander Szybki Pies</strong></h6><span class="text-xs">10:30 AM</span>
                                             </div>
-                                            <div class="col-auto"><a href="#"><i class="fas fa-check" style="font-size: 20px;margin-right: 18px;"></i></a><a href="#"><i class="fas fa-times" style="font-size: 22px;margin-right: 10px;"></i></a><a class="d-inline-block" href="https://www.google.com/"><img src="{% static 'images/avatars/Avatarwander.png' %}" style="width: 60px;height: 60px;border-style: solid;border-color: var(--bs-list-group-active-color);border-radius: 83px;"></a></div>
+                                            <div class="col-auto"><i class="fas fa-check" style="font-size: 20px;margin-right: 18px;"></i></div>
                                         </div>
                                     </li>
                                 </ul>
@@ -154,15 +136,15 @@
                         </div>
                         <div class="col-lg-6 mb-4">
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3"><a class="dashboard_link" href="#">
+                                <div class="card-header py-3">
                                         <h6 class="text-primary fw-bold m-0">Today Todo</h6>
-                                    </a></div>
+                                    </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"></li>
                                     <li class="list-group-item">
                                         <div class="row g-0 align-items-center">
                                             <div class="col me-2">
-                                                <h6 class="mb-0"><strong>Spacer</strong></h6><span class="text-xs">6:30&nbsp;</span>
+                                                <h6 class="mb-0"><strong>Walk</strong></h6><span class="text-xs">6:30&nbsp;</span>
                                             </div>
                                             <div class="col-auto"><button class="btn btn-primary btn-lg" type="button" style="width: 35px;height: 35px;background: rgba(78,115,223,0);color: rgba(255,255,255,0);"><i class="far fa-check-circle d-flex justify-content-center align-items-center star-completed" style="color: var(--bs-btn-bg);"></i></button></div>
                                         </div>
@@ -170,7 +152,7 @@
                                     <li class="list-group-item">
                                         <div class="row g-0 align-items-center">
                                             <div class="col me-2">
-                                                <h6 class="mb-0"><strong>Spacer wieczorny</strong></h6><span class="text-xs">20:30&nbsp;</span>
+                                                <h6 class="mb-0"><strong>Night Walk</strong></h6><span class="text-xs">20:30&nbsp;</span>
                                             </div>
                                             <div class="col-auto"><button class="btn btn-primary btn-lg" type="button" style="width: 35px;height: 35px;background: rgba(78,115,223,0);color: rgba(255,255,255,0);"><i class="far fa-circle d-flex justify-content-center align-items-center star" style="color: var(--bs-btn-bg);"></i></button></div>
                                         </div>
@@ -178,35 +160,7 @@
                                 </ul>
                             </div>
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3"><a class="dashboard_link" href="#">
-                                        <h6 class="text-primary fw-bold m-0">Beam Me Tomorrow Todo</h6>
-                                    </a></div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col me-2">
-                                                <h6 class="mb-0"><strong>Jedzenie</strong></h6><span class="text-xs">6:30</span>
-                                            </div>
-                                            <div class="col-auto"><button class="btn btn-primary btn-lg" type="button" style="width: 35px;height: 35px;background: rgba(78,115,223,0);color: rgba(255,255,255,0);"><i class="far fa-circle d-flex justify-content-center align-items-center star" style="color: var(--bs-btn-bg);"></i></button></div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col me-2">
-                                                <h6 class="mb-0"><strong>Spacer</strong></h6><span class="text-xs">8:30&nbsp;</span>
-                                            </div>
-                                            <div class="col-auto"><button class="btn btn-primary btn-lg" type="button" style="width: 35px;height: 35px;background: rgba(78,115,223,0);color: rgba(255,255,255,0);"><i class="far fa-check-circle d-flex justify-content-center align-items-center star-completed" style="color: var(--bs-btn-bg);"></i></button></div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col me-2">
-                                                <h6 class="mb-0"><strong>Głaskanie</strong></h6><span class="text-xs">20:30&nbsp;</span>
-                                            </div>
-                                            <div class="col-auto"><button class="btn btn-primary btn-lg" type="button" style="width: 35px;height: 35px;background: rgba(78,115,223,0);color: rgba(255,255,255,0);"><i class="far fa-check-circle d-flex justify-content-center align-items-center star-completed" style="color: var(--bs-btn-bg);"></i></button></div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <ul class="list-group list-group-flush"></ul>
                             </div>
                         </div>
                     </div>
@@ -214,13 +168,15 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2024</span></div>
+                    <div class="text-center my-auto copyright"><span>Copyright © Tododo 2024</span></div>
                 </div>
             </footer>
-        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        </div><i class="fas fa-angle-up"></i></a>
     </div>
+    <link rel="stylesheet" href="{% static 'css/untitled.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bs-init.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
 </body>
-
-{% endblock content %}
 
 </html>

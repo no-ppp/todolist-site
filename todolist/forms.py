@@ -2,13 +2,23 @@ from django import forms
 from .models import Money, TodoList, TitleTodo, User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
-
+from django.contrib.auth.forms import UserCreationForm
 
 
 
 class UserLoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField(
+        required=True,
+    )
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+        
 
 
 class MoneyForm(forms.ModelForm):

@@ -1,5 +1,6 @@
 <html data-bs-theme="light" lang="en">
-{% load static %}
+{% load static %}]
+{% load widget_tweaks %}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -28,7 +29,8 @@
                                     </div>
                                     <form class="user" method= 'POST' action = ''>
                                         {% csrf_token %}
-                                        {{user_form.as_p}}
+                                        <div class="col-sm-6">{% render_field user_form.email placeholder="email" class+="form-control form-control-user" %}</div>
+                                        <div class="col-sm-6">{% render_field user_form.password placeholder="password" class+="form-control form-control-user" %}</div>
                                         <div class="mb-3">
                                             <div class="custom-checkbox small">
                                                 <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Remember Me</label></div>
@@ -38,7 +40,7 @@
                                         <hr>
                                     </form>
                                     <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
-                                    <div class="text-center"><a class="small" href="register.html">Create an Account!</a></div>
+                                    <div class="text-center"><a class="small" href="{% url 'todolist:register' %}">Create an Account!</a></div>
                                 </div>
                             </div>
                         </div>

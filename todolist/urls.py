@@ -9,7 +9,8 @@ app_name = 'todolist'
 urlpatterns = [
     path('', views.home, name='home'),
     path('login_view/', views.login_view, name='login'),
-    path('register/', views.register, name='register'),
+    path('register/', views.register_view, name='register'),
+    path('register_completed', views.register_completed, name='register_completed'),
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile, name='profile'),
     path('money_view/', views.money_view, name='money_view'),
@@ -23,6 +24,6 @@ urlpatterns = [
     path('edit_task/<int:user_id>/<int:todolist_id>', views.edit_task, name='edit_task'),
     path('edit_current_task/<int:user_id>/<int:title_id>/', views.edit_current_task, name='edit_current_task'),
     path('activate/<str:token>/', views.activation_user, name='activate'),
-    path('overview_site/', views.overview_site, name='overview_site')
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]
 
