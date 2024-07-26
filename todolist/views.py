@@ -38,10 +38,20 @@ def dashboard(request):
 
     return render(request, 'dashboard.html')
 
+#TODO think about making signal which will redirect user after he activate his account via email
 def required_active_view(request):
     return render(request, 'registration/required_active.html')
 
+#TODO Think about making decorator which will overide this code:
+#(check the rest of fucntions with this if statement after making this decorator)
+#(basicaly all the login/register function)
+#-------------------------
+#if request.user.is_authenticated:
+#return redirect('todolist:dashboard')
+#--------------------------
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('todolist:dashboard')
     user_form = UserLoginForm()
     if request.method == 'POST':
         user_form = UserLoginForm(request.POST)
@@ -62,6 +72,8 @@ def login_view(request):
 
 
 def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('todolist:dashboard')
     register_form = UserRegisterForm()
     if request.method == 'POST':
         register_form = UserRegisterForm(request.POST)
@@ -79,6 +91,8 @@ def register_view(request):
 
 
 def register_completed(request):
+    if request.user.is_authenticated:
+        return redirect('todolist:dashboard')
     if not request.user.is_authenticated:
         return redirect('todolist:home')
     elif request.user.is_active == True:
@@ -89,18 +103,25 @@ def register_completed(request):
 
 #TODO display the user email after reset password is sent
 def password_reset_done(request):
+    if request.user.is_authenticated:
+        return redirect('todolist:dashboard')
     return render(request, 'registration/password_reset_done.html')
 
 def new_password_invalid(request):
+    if request.user.is_authenticated:
+        return redirect('todolist:dashboard')
     return render(request, 'registration/new_password_invalid.html')
 
 def password_reset_complete(request):
+    if request.user.is_authenticated:
+        return redirect('todolist:dashboard')
     return render(request, 'registration/password_reset_complete.html')
-
 
 
 #TODO Refactor this function to utils.py
 def password_reset(request):
+    if request.user.is_authenticated:
+        return redirect('todolist:dashboard')
     email_form = EmailForm()
     if request.method == 'POST':
         email_form = EmailForm(request.POST)
@@ -145,7 +166,7 @@ def new_password_email(request, uidb64, token):
     else:
         return render(request, 'registration/new_password_invalid.html')
 
-@required_active
+
 def logout_view(request):
     logout(request)
     return redirect('todolist:home')
