@@ -19,6 +19,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
+from .decorators import required_active
 
 
 
@@ -32,12 +33,13 @@ def home(request):
     
     return render(request, 'home.html')
 
-@login_required
+@required_active
 def dashboard(request):
 
     return render(request, 'dashboard.html')
 
-
+def required_active_view(request):
+    return render(request, 'registration/required_active.html')
 
 def login_view(request):
     user_form = UserLoginForm()
@@ -143,7 +145,7 @@ def new_password_email(request, uidb64, token):
     else:
         return render(request, 'registration/new_password_invalid.html')
 
-@login_required
+@required_active
 def logout_view(request):
     logout(request)
     return redirect('todolist:home')
@@ -158,17 +160,17 @@ def activation_user(request, token):
     user.save()
     return render(request, 'registration/activated_user.html', {'user' : user})
 
-@login_required
+@required_active
 def profile(request):
     return render(request,'profile.html')
 
-@login_required
+@required_active
 def profile_settings(request):
     return render(request, 'profile_settings.html')
 
 #TODO ADD JAVASCRIPT TO SHOW THE MATPLOTLIB FILES
 #TODO ADD SIGNAL TO ADD NEW NOTE EVERY TIME USER DELETE ALL NOTES SO MATPLOTLIB WORK
-@login_required
+@required_active
 def todo_view(request, user_id):
     #filtering the todolist from user_id
     todolist = TodoList.objects.filter(user_id=user_id)
@@ -248,7 +250,7 @@ def todo_view(request, user_id):
     }
     return render(request,'todo_view.html', context)
 
-@login_required
+@required_active
 def add_title_todo(request, user_id):
     form = TodoTitleForm()
     if request.method == 'POST':
@@ -264,7 +266,7 @@ def add_title_todo(request, user_id):
     return render(request, 'add_todo_title.html', context)
 
 
-@login_required
+@required_active
 def add_todo_with_title(request, user_id):
     form = EditTodoForm()
     add_title = AddTitleForm(user=request.user)
@@ -284,7 +286,7 @@ def add_todo_with_title(request, user_id):
     }
     return render(request,'add_todo_with_title.html', context)
 
-@login_required
+@required_active
 def edit_task(request, user_id, todolist_id):
     task = get_object_or_404(TodoList, id=todolist_id)
     form = EditTodoForm(instance=task)
@@ -303,7 +305,7 @@ def edit_task(request, user_id, todolist_id):
     }
     return render(request, 'edit_task.html', context)
 
-@login_required
+@required_active
 def delete_task(request, user_id, todolist_id):
     task = get_object_or_404(TodoList, id=todolist_id)
     if request.method == "POST":
@@ -315,7 +317,7 @@ def delete_task(request, user_id, todolist_id):
     }
     return render(request, 'delete_task.html', context )
 
-@login_required
+@required_active
 def edit_current_task(request, user_id,title_id,):
     form = EditTodoForm()
     title_instance = get_object_or_404(TitleTodo, pk =title_id)
@@ -335,7 +337,7 @@ def edit_current_task(request, user_id,title_id,):
     }
     return render(request, 'edit_current_task.html', context)
 
-@login_required
+@required_active
 def set_completed(request, user_id, todolist_id):
     task = get_object_or_404(TodoList, id=todolist_id)
     if request.method == 'POST':
@@ -349,7 +351,7 @@ def set_completed(request, user_id, todolist_id):
     return render(request, 'set_completed.html', context)
 
 
-@login_required
+@required_active
 def money_view(request):
     form = MoneySearch(request.GET)
     money_object = Money.objects.all()
@@ -386,7 +388,7 @@ def money_view(request):
     return render(request,'money_view.html', context)
 
 
-@login_required
+@required_active
 def money_view_add(request):
     form = MoneyForm()
     if request.method == 'POST':

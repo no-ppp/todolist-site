@@ -16,6 +16,7 @@ urlpatterns = [
     path('new_password_invalid/', views.new_password_invalid, name='new_password_invalid'),
     path('password_reset_done/', views.password_reset_done, name='password_reset_done'),
     path('password_reset_complete/', views.password_reset_complete, name='password_reset_complete'),
+    path('required_active_user/', views.required_active_view, name='required_active_user'),
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile, name='profile'),
     path('money_view/', views.money_view, name='money_view'),

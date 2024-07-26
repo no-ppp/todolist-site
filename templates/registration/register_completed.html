@@ -7,5 +7,7 @@
         <div class="text-center">
             <h4 class="text-dark mb-4">Registration completed ! {{ user.username }}</h4>
             <p> Please check your mailbox ! </p>
+            <p> After activation </p>
+            <div class="text-center"><a class="small" href="{% url 'todolist:home' %}">Lets start !</a></div>
 
 {% endblock content %}

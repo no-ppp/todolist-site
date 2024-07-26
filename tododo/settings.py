@@ -120,4 +120,11 @@ SITE_URL = 'http://127.0.0.1:8000/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Redirecting to /login/ from @login required decorator
-LOGIN_URL = '/login_view'
+LOGIN_URL = '/login_view/'
+
+'''CSRF TOKEN'''
+#change to True on https
+CSRF_COOKIE_SECURE = False 
+SESSION_COOKIE_SECURE = False
+
+ALLOWED_REDIRECT_HOSTS = ['127.0.0.1', 'localhost']
