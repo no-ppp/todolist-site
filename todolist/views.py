@@ -15,8 +15,9 @@ from django.http import HttpResponse
 from Google import create_message, send_message, sending_message
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
+from django.contrib.auth.forms import SetPasswordForm
 
 
 
@@ -87,6 +88,13 @@ def register_completed(request):
 def password_reset_done(request):
     return render(request, 'registration/password_reset_done.html')
 
+def new_password_invalid(request):
+    return render(request, 'registration/new_password_invalid.html')
+
+def password_reset_complete(request):
+    return render(request, 'registration/password_reset_complete.html')
+
+
 
 #TODO Refactor this function to utils.py
 def password_reset(request):
@@ -100,10 +108,10 @@ def password_reset(request):
                 sender = settings.DEFAULT_FROM_EMAIL
                 token = default_token_generator.make_token(user)
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
-                reset_url = f'{settings.SITE_URL}/reset_password_email/{uid}/{token}/'
-                message = f'Hello dear {user.username}'
+                reset_url = f'{settings.SITE_URL}/new_password_email/{uid}/{token}/'
+                message = (f'Hello dear {user.username}'
                 f'here is your link to reset your password'
-                f'\n {reset_url}'
+                f'\n {reset_url}')
                 to = user.email
                 subject = 'Reset Password'
                 sending_message(
@@ -113,7 +121,26 @@ def password_reset(request):
                     message
                 )
         return redirect("todolist:password_reset_done")
-    return render(request, "registration/password_reset_form.html", {'email_form' : email_form})
+    return render(request, "registration/password_reset_email.html", {'email_form' : email_form})
+
+
+def new_password_email(request, uidb64, token):
+    try: 
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, User.DoesNotExist, OverflowError):
+        user = None
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            form = SetPasswordForm(user, data=request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('todolist:password_reset_complete')
+        else:
+            form = SetPasswordForm(user)
+        return render(request, 'registration/new_password_email.html', {'forms': form})
+    else:
+        return render(request, 'registration/new_password_invalid.html')
 
 
 def logout_view(request):
