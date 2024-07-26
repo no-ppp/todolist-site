@@ -118,3 +118,6 @@ DEFAULT_FROM_EMAIL = 'todolist.service.auth@gmail.com'
 SITE_URL = 'http://127.0.0.1:8000/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Redirecting to /login/ from @login required decorator
+LOGIN_URL = '/login_view'
