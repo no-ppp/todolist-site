@@ -21,6 +21,7 @@ class UserAdminPanel(UserAdmin):
     search_fields = ('email', 'name')
     ordering = ('email',)
 
+
 admin.site.register(User, UserAdminPanel)
 admin.site.register(Money)
 admin.site.register(TodoList)

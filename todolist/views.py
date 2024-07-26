@@ -20,6 +20,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from .decorators import required_active
+from django.urls import reverse
 
 
 
@@ -42,12 +43,17 @@ def dashboard(request):
 def required_active_view(request):
     return render(request, 'registration/required_active.html')
 
-#TODO Think about making decorator which will overide this code:
+#TODO 
+# Think about making decorator which will overide this code:
 #(check the rest of fucntions with this if statement after making this decorator)
 #(basicaly all the login/register function)
 #-------------------------
 #if request.user.is_authenticated:
 #return redirect('todolist:dashboard')
+#--------------------------
+#TODO 
+#--------------------------
+# DISPLAY ERRORS IN CUSTOM REGISTER FORMS !
 #--------------------------
 def login_view(request):
     if request.user.is_authenticated:
@@ -102,10 +108,13 @@ def register_completed(request):
     
 
 #TODO display the user email after reset password is sent
-def password_reset_done(request):
+def password_reset_done(request, uidb64):
     if request.user.is_authenticated:
         return redirect('todolist:dashboard')
-    return render(request, 'registration/password_reset_done.html')
+    context = {
+        'uidb64' : uidb64
+    }
+    return render(request, 'registration/password_reset_done.html', context)
 
 def new_password_invalid(request):
     if request.user.is_authenticated:
@@ -131,8 +140,8 @@ def password_reset(request):
             for user in user_email:
                 sender = settings.DEFAULT_FROM_EMAIL
                 token = default_token_generator.make_token(user)
-                uid = urlsafe_base64_encode(force_bytes(user.pk))
-                reset_url = f'{settings.SITE_URL}/new_password_email/{uid}/{token}/'
+                uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+                reset_url = f'{settings.SITE_URL}/new_password_email/{uidb64}/{token}/'
                 message = (f'Hello dear {user.username}'
                 f'here is your link to reset your password'
                 f'\n {reset_url}')
@@ -144,7 +153,7 @@ def password_reset(request):
                     subject,
                     message
                 )
-        return redirect("todolist:password_reset_done")
+        return redirect(reverse('todolist:password_reset_done', kwargs={'uidb64': uidb64}))
     return render(request, "registration/password_reset_email.html", {'email_form' : email_form})
 
 

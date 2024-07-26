@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,6 +23,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
+
 # Application definition
 INSTALLED_APPS = [
     'todolist',
@@ -32,7 +34,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'widget_tweaks'
+    'django.contrib.sites',
+    'widget_tweaks',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    
 ]
 
 MIDDLEWARE = [
@@ -43,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",     #<-- django-allauth middleware
 ]
 
 ROOT_URLCONF = 'tododo.urls'
@@ -108,10 +117,12 @@ AUTH_USER_MODEL = 'todolist.User'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#CUSTOM BACKEND FOR THE EMAIL login
+#CUSTOM BACKEND FOR THE --> email login  --> allauth
 AUTHENTICATION_BACKENDS = [
-    'todolist.auth_backends.EmailBackend',  
-    'django.contrib.auth.backends.ModelBackend',  
+      
+    'django.contrib.auth.backends.ModelBackend', 
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'todolist.auth_backends.EmailBackend',
 ]
 
 DEFAULT_FROM_EMAIL = 'todolist.service.auth@gmail.com'
@@ -128,3 +139,35 @@ CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
 
 ALLOWED_REDIRECT_HOSTS = ['127.0.0.1', 'localhost']
+
+
+'''django-allauth'''
+#Social account providers
+#(the keys are in .env file, use os.getenv to take them out)
+#(if you pulled this from github you have to create your own .env)
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        
+        'EMAIL_AUTHENTICATION': True,   #<-- this was the case about Unique Constraint
+
+        'SCOPES': {
+            "profile",
+            "email"
+        },
+        'AUTH_PARAMS': {
+            "acces_type": "online"
+        },
+    }
+}
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT= True
+SOCIALACCOUNT_LOGIN_ON_GET=True
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_SIGNUP_FORM_CLASS = None
