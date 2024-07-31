@@ -21,10 +21,8 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
 def get_service():
     creds = None
-    # Load credentials from token file
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    # Refresh or obtain new credentials if needed
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .forms import MoneyForm, MoneySearch, EditTodoForm, IsActive, AddTitleForm, UserLoginForm
 from .forms import  TodoTitleForm, UserRegisterForm, EmailForm
 from .models import Money, TodoList, TitleTodo, User
@@ -21,6 +21,8 @@ from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from .decorators import required_active
 from django.urls import reverse
+from django.contrib import messages
+
 
 
 
@@ -64,12 +66,17 @@ def login_view(request):
         if user_form.is_valid():
             email = user_form.cleaned_data['email']
             password = user_form.cleaned_data['password']
-            user = authenticate(request, email=email, password=password)
+            if User.objects.filter(email=email, is_user_password_set=False):
+                    request.session['email'] = email
+                    return redirect('todolist:password_reset_email')
+            else:
+                user = authenticate(request, email=email, password=password)
             if user is not None:
                 auth_login(request, user)
                 return redirect('todolist:home')
             else:
-                user_form.add_error(None, 'Failed to login')
+                messages.error(request, 'Your email and password do not match.')
+        
     context = {
         'user_form' : user_form
     }
@@ -86,10 +93,14 @@ def register_view(request):
         if register_form.is_valid():
             user = register_form.save()
             password = register_form.cleaned_data['password1']
-            user = authenticate(email=user.email, password=password)
+            password2 = register_form.cleaned_data['password2']
+            user = authenticate(request, email=user.email, password=password)
             if user is not None:
+                user.is_user_password_set = True
+                user.save()
                 auth_login(request, user)
-            return redirect('todolist:register_completed')
+                return redirect('todolist:register_completed')
+        
     context = {
         'register_form' : register_form
     }
@@ -116,6 +127,9 @@ def password_reset_done(request, uidb64):
     }
     return render(request, 'registration/password_reset_done.html', context)
 
+def invalid_email(request):
+    return render(request, 'registration/invalid_email.html')
+
 def new_password_invalid(request):
     if request.user.is_authenticated:
         return redirect('todolist:dashboard')
@@ -129,13 +143,24 @@ def password_reset_complete(request):
 
 #TODO Refactor this function to utils.py
 def password_reset(request):
+    email_form = None
     if request.user.is_authenticated:
         return redirect('todolist:dashboard')
-    email_form = EmailForm()
+    email = request.session.get('email')
+    if email == None:
+        email_form = EmailForm()
     if request.method == 'POST':
-        email_form = EmailForm(request.POST)
-        email = request.POST['email']
-        user_email = User.objects.filter(email=email)
+        if email:
+            user_email = User.objects.filter(email=email)
+            del request.session['email']
+            subject = 'Setting your password'
+            password_message = 'Here is your link to set your password'
+        else:   
+            email_form = EmailForm(request.POST)
+            email = request.POST['email']
+            user_email = User.objects.filter(email=email)
+            subject = 'Reset Password'
+            password_message = 'Here is your link to reset your password'
         if user_email.exists():
             for user in user_email:
                 sender = settings.DEFAULT_FROM_EMAIL
@@ -143,18 +168,20 @@ def password_reset(request):
                 uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
                 reset_url = f'{settings.SITE_URL}/new_password_email/{uidb64}/{token}/'
                 message = (f'Hello dear {user.username}'
-                f'here is your link to reset your password'
+                f'\n{password_message}'
                 f'\n {reset_url}')
                 to = user.email
-                subject = 'Reset Password'
                 sending_message(
                     sender,
                     to,
                     subject,
                     message
                 )
-        return redirect(reverse('todolist:password_reset_done', kwargs={'uidb64': uidb64}))
-    return render(request, "registration/password_reset_email.html", {'email_form' : email_form})
+            return redirect(reverse('todolist:password_reset_done', kwargs={'uidb64': uidb64}))
+        else:
+            return redirect('todolist:invalid_email')
+    context = { 'email_form': email_form} if email_form else {'email': email}
+    return render(request, "registration/password_reset_email.html", context)
 
 
 def new_password_email(request, uidb64, token):
@@ -167,7 +194,9 @@ def new_password_email(request, uidb64, token):
         if request.method == 'POST':
             form = SetPasswordForm(user, data=request.POST)
             if form.is_valid():
-                form.save()
+                user = form.save(commit=False)
+                user.is_user_password_set = True
+                user.save()
                 return redirect('todolist:password_reset_complete')
         else:
             form = SetPasswordForm(user)

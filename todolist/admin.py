@@ -5,19 +5,19 @@ from .models import User, Money, TodoList, TitleTodo
 
 class UserAdminPanel(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'name', 'bio', 'avatar', 'password', 'activation_token')}),
+        (None, {'fields': ('username', 'email', 'name', 'bio', 'avatar','is_user_password_set', 'password', 'activation_token')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'name', 'bio', 'avatar', 'password1', 'password2', 'activation_token'),
+            'fields': ('username', 'email', 'name', 'bio', 'avatar','is_user_password_set', 'password1', 'password2', 'activation_token'),
         }),
     )
 
     # Dodatkowe opcje wyświetlania w listach
-    list_display = ('username', 'email', 'name', 'avatar', 'is_staff')
+    list_display = ('username', 'email', 'name', 'avatar','is_user_password_set', 'is_staff')
     search_fields = ('email', 'name')
     ordering = ('email',)
 

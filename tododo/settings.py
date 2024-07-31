@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
     
 ]
 
@@ -138,7 +139,8 @@ LOGIN_URL = '/login_view/'
 CSRF_COOKIE_SECURE = False 
 SESSION_COOKIE_SECURE = False
 
-ALLOWED_REDIRECT_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_REDIRECT_HOSTS = ['*'] # !!!----CHANGE AFTER DEVELOPMENT ----!!!
+ALLOWED_HOSTS = ['*']
 
 
 '''django-allauth'''
@@ -161,8 +163,15 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PARAMS': {
             "acces_type": "online"
         },
+    },
+    'facebook': {
+        'LOCALE_FUNC': lambda request: 'en_US'
     }
 }
+
+
+SOCIALACCOUNT_ADAPTER = 'todolist.adapters.CustomSocialAccountAdapter' # <-- READ ABOUT IF IT'S BETTER TO USE SIGNAL THEN THIS.
+
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT= True
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
@@ -171,3 +180,5 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_SIGNUP_FORM_CLASS = None
+
+

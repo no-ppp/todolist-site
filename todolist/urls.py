@@ -1,6 +1,4 @@
 from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
 from . import views
 
 
@@ -15,6 +13,7 @@ urlpatterns = [
     path('new_password_email/<str:uidb64>/<str:token>/', views.new_password_email, name='new_password_email'),
     path('new_password_invalid/', views.new_password_invalid, name='new_password_invalid'),
     path('password_reset_done/<str:uidb64>/', views.password_reset_done, name='password_reset_done'),
+    path('invalid_email/', views.invalid_email, name='invalid_email'),
     path('password_reset_complete/', views.password_reset_complete, name='password_reset_complete'),
     path('required_active_user/', views.required_active_view, name='required_active_user'),
     path('logout/', views.logout_view, name='logout'),
