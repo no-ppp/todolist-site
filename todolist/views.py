@@ -67,7 +67,7 @@ def login_view(request):
             email = user_form.cleaned_data['email']
             password = user_form.cleaned_data['password']
             if User.objects.filter(email=email, is_user_password_set=False):
-                    request.session['email'] = email
+                    request.session['email'] = email #<-- Taking the key:value email to next function
                     return redirect('todolist:password_reset_email')
             else:
                 user = authenticate(request, email=email, password=password)
