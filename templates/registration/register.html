@@ -27,8 +27,10 @@
                 <div class="col-sm-6">{% render_field register_form.email placeholder="Email" class+="form-control form-control-user" %}</div>
                 <div class="col-sm-6">{% render_field register_form.password1 placeholder="Password" class+="form-control form-control-user" %}</div>
                 <div class="col-sm-6">{% render_field register_form.password2 placeholder="Repeat your Password" class+="form-control form-control-user" %}</div>
+            
             </div><button class="btn btn-primary d-block btn-user w-100" type="submit">Register Account</button>
-            <hr><a class="btn btn-primary d-block btn-google btn-user w-100 mb-2" role="button"><i class="fab fa-google"></i>&nbsp; Register with Google</a><a class="btn btn-primary d-block btn-facebook btn-user w-100" role="button"><i class="fab fa-facebook-f"></i>&nbsp; Register with Facebook</a>
+            {% load socialaccount %}
+            <hr><a class="btn btn-primary d-block btn-google btn-user w-100 mb-2" href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i>&nbsp; Login with Google</a><a class="btn btn-primary d-block btn-facebook btn-user w-100" href="{% provider_login_url 'facebook' %}"><i class="fab fa-facebook-f"></i>&nbsp; Login with Facebook</a>
             <hr>
         </form>
         <div class="text-center"><a class="small" href="{% url 'todolist:password_reset_email' %}">Forgot Password?</a></div>

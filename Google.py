@@ -8,6 +8,8 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from googleapiclient.errors import HttpError
 from dotenv import load_dotenv
+from google.auth.exceptions import RefreshError
+from pathlib import Path
 
 # Load environment variables from .env file
 load_dotenv()
@@ -16,24 +18,47 @@ load_dotenv()
 CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = Path(__file__).resolve().parent
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+
 
 def get_service():
     creds = None
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    token_path = BASE_DIR / 'token.json'
+    credentials_path = BASE_DIR / 'credentials.json'
+
+    # Check if token file exists
+    if token_path.exists():
+        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
+        print("Loaded credentials from file.")
+    
+    # Refresh or get new credentials if necessary
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
+            try:
+                creds.refresh(Request())
+                print("Token refreshed.")
+            except Exception as e:
+                print(f'Error refreshing token: {e}')
+                creds = None  # Force re-authentication
+        if not creds:
             flow = InstalledAppFlow.from_client_secrets_file(
-                os.path.join(BASE_DIR, 'credentials.json'), SCOPES)
+                credentials_path, SCOPES)
             creds = flow.run_local_server(port=8080)
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-    service = build('gmail', 'v1', credentials=creds)
-    return service
+            print("New token obtained.")
+        
+        # Save the new credentials to the file
+        with token_path.open('w') as token_file:
+            token_file.write(creds.to_json())
+            print("Token saved to file.")
+
+    try:
+        service = build('gmail', 'v1', credentials=creds)
+        print("Gmail service created successfully.")
+        return service
+    except Exception as e:
+        print(f'Error creating service: {e}')
+        return None
 
 def create_message(sender, to, subject, message_text):
     message = MIMEMultipart()

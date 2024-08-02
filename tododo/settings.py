@@ -182,3 +182,8 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_SIGNUP_FORM_CLASS = None
 
 
+# FOR TESTING HTTPS <--- change after development
+CSRF_TRUSTED_ORIGINS = [
+    'https://todolist.loca.lt',
+]
+

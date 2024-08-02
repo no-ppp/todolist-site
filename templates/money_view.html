@@ -6,7 +6,7 @@
                     <div class="card shadow">
                         <div class="card-header py-3">
                             <p class="text-primary m-0 fw-bold">Money Info</p>
-                            <a href="{% url 'todolist:money_view_add' %}" class="btn btn-primary btn-sm d-none d-sm-inline-block">
+                            <a href="{% url 'todolist:money_view_add' user_id=user_id %}" class="btn btn-primary btn-sm d-none d-sm-inline-block">
                                 Add new  
                             </a>
                         </div>
@@ -27,13 +27,13 @@
                                             <th>Field</th>
                                             <th>What</th>
                                             {% if search_query == 'billings' %}
-                                            <th><a href="{% url 'todolist:money_view' %}?search_query=earnings" class="link-a my-custom-link">Type </a></th>
+                                            <th><a href="{% url 'todolist:money_view' user_id=user_id %}?search_query=earnings" class="link-a my-custom-link">Type </a></th>
                                             {% elif search_query == 'earnings' %}
-                                            <th><a href="{% url 'todolist:money_view' %}?search_query=billings" class="link-a my-custom-link">Type </a> </th>
+                                            <th><a href="{% url 'todolist:money_view' user_id=user_id %}?search_query=billings" class="link-a my-custom-link">Type </a> </th>
                                             {% else %}
-                                            <th><a href="{% url 'todolist:money_view' %}?search_query=earnings" class="link-a my-custom-link">Type </a> </th>
+                                            <th><a href="{% url 'todolist:money_view' user_id=user_id %}?search_query=earnings" class="link-a my-custom-link">Type </a> </th>
                                             {% endif %}
-                                            <th><a href="{% url 'todolist:money_view' %}?search_query=&important_only=on" class="link-a my-custom-link">Important</a></th>
+                                            <th><a href="{% url 'todolist:money_view' user_id=user_id %}?search_query=&important_only=on" class="link-a my-custom-link">Important</a></th>
                                             <th>Date</th>
                                             <th>Money</th>
                                         </tr>

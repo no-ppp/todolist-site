@@ -28,6 +28,7 @@ class Money(models.Model):
     important_info = models.BooleanField(verbose_name='Is this important ?', default=False)
     created_at = models.DateTimeField(auto_now=True)
     money_info = models.FloatField(verbose_name='Money')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.field_info} - {self.what_info} - {self.money_info} zł"
@@ -42,7 +43,6 @@ class TitleTodo(models.Model):
     def __str__(self) -> str:
         return self.title
     
-
 class TodoList(models.Model):
     title = models.ForeignKey(TitleTodo, on_delete=models.CASCADE)
     task = models.CharField(max_length=20)

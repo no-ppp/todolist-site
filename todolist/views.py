@@ -72,7 +72,10 @@ def login_view(request):
             else:
                 user = authenticate(request, email=email, password=password)
             if user is not None:
+                remember_me = request.POST.get('remember_me') == 'on'
                 auth_login(request, user)
+                if remember_me:
+                    request.session.set_expiry(1209600)
                 return redirect('todolist:home')
             else:
                 messages.error(request, 'Your email and password do not match.')
@@ -411,9 +414,9 @@ def set_completed(request, user_id, todolist_id):
 
 
 @required_active
-def money_view(request):
+def money_view(request, user_id):
     form = MoneySearch(request.GET)
-    money_object = Money.objects.all()
+    money_object = Money.objects.filter(user_id=user_id)
     search_query = request.GET.get('search_query')
     important_only = request.GET.get('important_only')
     if search_query:
@@ -448,13 +451,15 @@ def money_view(request):
 
 
 @required_active
-def money_view_add(request):
+def money_view_add(request, user_id):
     form = MoneyForm()
     if request.method == 'POST':
         form = MoneyForm(data=request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('todolist:money_view')
+            money_instance = form.save(commit=False)
+            money_instance.user_id = user_id
+            money_instance.save()
+            return redirect('todolist:money_view', user_id)
     context = {
         'form' : form
     }
