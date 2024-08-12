@@ -2,168 +2,113 @@
 {% load static %}
 {% block content %}
 <body id="page-top">
-                <div class="container-fluid">
-                    <h3 class="text-dark mb-4">Profile</h3>
-                    <div class="row mb-3">
-                        <div class="col-lg-4">
-                            <div class="card mb-3">
-                                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="assets/img/avatars/Ciri.png" width="160" height="160" style="box-shadow: 1px 1px 20px rgb(0,25,255);">
-                                    <div class="mb-3"><button class="btn btn-primary btn-sm" type="button">Settings</button></div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="text-primary fw-bold m-0">Overview</h6>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="small fw-bold">Billings<span class="float-end">20%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"><span class="visually-hidden">20%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Important Tasks<span class="float-end">40%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;"><span class="visually-hidden">40%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Tasks<span class="float-end">60%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"><span class="visually-hidden">60%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Earnings<span class="float-end">80%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;"><span class="visually-hidden">80%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Account setup<span class="float-end">Complete!</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"><span class="visually-hidden">100%</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="row mb-3 d-none">
-                                <div class="col">
-                                    <div class="card text-white bg-primary shadow">
-                                        <div class="card-body">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <p class="m-0">Peformance</p>
-                                                    <p class="m-0"><strong>65.2%</strong></p>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
-                                            </div>
-                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card text-white bg-success shadow">
-                                        <div class="card-body">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <p class="m-0">Peformance</p>
-                                                    <p class="m-0"><strong>65.2%</strong></p>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
-                                            </div>
-                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="card shadow mb-3">
-                                        <div class="card-header py-3">
-                                            <p class="text-primary m-0 fw-bold">User&nbsp;</p>
-                                        </div>
-                                        <div class="card-body">
-                                            <form>
-                                                <div class="row">
-                                                    <div class="col" style="border: 1px solid rgba(133,135,150,0.23) ;">
-                                                        <div class="mb-3"><label class="form-label" for="username"><strong>Username</strong></label>
-                                                            <h4 class="fw-normal" style="color: var(--bs-emphasis-color);">Ciri gruby jes</h4>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col" style="border: 1px solid rgba(133,135,150,0.23) ;">
-                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label>
-                                                            <h4 class="fw-normal" style="color: var(--bs-emphasis-color);">ciri@gmail.com</h4>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col" style="border: 1px solid rgba(133,135,150,0.23) ;border-left-width: 1px;">
-                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>First Name</strong></label>
-                                                            <h3 class="fw-normal" style="color: var(--bs-emphasis-color);">Ciri</h3>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col" style="border: 1px solid rgba(133,135,150,0.23) ;border-left-width: 0px;">
-                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Last Name</strong></label>
-                                                            <h3 class="fw-normal" style="color: var(--bs-emphasis-color);">Pies</h3>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col" style="border: 1px solid rgba(133,135,150,0.23) ;">
-                                                        <div class="mb-3"><label class="form-label" for="username"><strong>Age:</strong></label>
-                                                            <h3 class="fw-normal" style="color: var(--bs-emphasis-color);">2</h3>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="card shadow">
-                                        <div class="card-header py-3">
-                                            <p class="text-primary m-0 fw-bold">Contact Settings</p>
-                                        </div>
-                                        <div class="card-body">
-                                            <form>
-                                                <div class="mb-3"><label class="form-label" for="address"><strong>Address</strong></label>
-                                                    <h3 class="fw-semibold">Biskupice</h3>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="city"><strong>City</strong></label>
-                                                            <h3 class="fw-semibold">Wieliczka</h3>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="country"><strong>Country</strong></label>
-                                                            <h3 class="fw-semibold">Polska</h3>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3"></div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card shadow mb-5"></div>
-                </div>
-            </div>
-            <div id="card-mobile" class="card-mobile">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="text-primary fw-bold m-0">Overview</h6>
-                    </div>
-                    <div class="card-body">
-                        <div style="background: rgba(133,135,150,0.25);border-radius: 19px;box-shadow: 1px 1px 8px rgb(0,102,255);">
-                            <p style="color: var(--bs-emphasis-color);padding: 10px;">asdasdasdasdadasdasasadsaaaa ciriririciiciciasdddddddddddddddddddasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+    <div class="container-fluid">
+        <h3 class="text-dark mb-4">Profile</h3>
+        <div class="row mb-3">
+            <div class="col-lg-4">
+                <div class="card mb-3">
+                    <div class="card-body text-center shadow">
+                        
+                        <img class="rounded-circle mb-3 mt-4 img-fluid" src="{{ user.avatar.url }}" alt="User Avatar" style="box-shadow: 1px 1px 20px rgb(0,25,255); max-width: 250px; width: 250px; height: 250px; object-fit: cover;">
+                        <div class="mb-3">
+                            <a class="btn btn-primary btn-sm" href="{% url 'todolist:profile_settings' user_id=user_id %}">Settings</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <footer class="bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2024</span></div>
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col">
+                        <div class="card shadow mb-3">
+                            <div class="card-header py-3">
+                                <p class="text-primary m-0 fw-bold">User&nbsp;</p>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="row">
+                                        <div class="col" style="border: 1px solid rgba(133,135,150,0.23);">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="username"><strong>Username</strong></label>
+                                                <h4 class="fw-normal" style="color: var(--bs-emphasis-color);">{{ user.username }}</h4>
+                                            </div>
+                                        </div>
+                                        <div class="col" style="border: 1px solid rgba(133,135,150,0.23);">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="email"><strong>Email Address</strong></label>
+                                                <h4 class="fw-normal" style="color: var(--bs-emphasis-color);">{{ user.email }}</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col" style="border: 1px solid rgba(133,135,150,0.23);border-left-width: 1px;">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="first_name"><strong>First Name</strong></label>
+                                                <h3 class="fw-normal" style="color: var(--bs-emphasis-color);">{{ user.name }}</h3>
+                                            </div>
+                                        </div>
+                                        <div class="col" style="border: 1px solid rgba(133,135,150,0.23);border-left-width: 0px;">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="last_name"><strong>Last Name</strong></label>
+                                                <h3 class="fw-normal" style="color: var(--bs-emphasis-color);">{{ user.last_name }}</h3>
+                                            </div>
+                                        </div>
+                                        <div class="col" style="border: 1px solid rgba(133,135,150,0.23);">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="username"><strong>Born</strong></label>
+                                                <h3 class="fw-normal" style="color: var(--bs-emphasis-color);">{{ user.born }}</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card shadow">
+                            <div class="card-header py-3">
+                                <p class="text-primary m-0 fw-bold">Contact Settings</p>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="city"><strong>City</strong></label>
+                                                <h3 class="fw-semibold">{{ user.city }}</h3>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="country"><strong>Country</strong></label>
+                                                <h3 class="fw-semibold">{{user.country}}</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </footer>
-        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+            </div>
+        </div>
+        <div class="card shadow mb-5"></div>
     </div>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="assets/js/theme.js"></script>
+    <div id="card-mobile" class="card-mobile">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="text-primary fw-bold m-0">Overview</h6>
+            </div>
+            <div class="card-body">
+                <div style="background: rgba(133,135,150,0.25);border-radius: 19px;box-shadow: 1px 1px 8px rgb(0,102,255);">
+                    <p style="color: var(--bs-emphasis-color);padding: 10px;">{{ user.bio }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="bg-white sticky-footer">
+        <div class="container my-auto">
+            <div class="text-center my-auto copyright"><span>Copyright © Tododo 2024</span></div>
+        </div>
+    </footer>
+    <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
 </body>
-
 {% endblock %}

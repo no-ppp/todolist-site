@@ -2,14 +2,24 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+class Country(models.Model):
+    country = models.CharField(max_length=30)
+
+    def __str__(self) ->str:
+        return self.country
+
 class User(AbstractUser):
-    name = models.CharField(max_length=30)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, default=1)
+    city = models.CharField(max_length=30, default='Unknown')
+    name = models.CharField(max_length=30, default='Unknown')
+    last_name = models.CharField(max_length=30, default='Unknown')
     email = models.EmailField(unique=True)
     is_user_password_set = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     activation_token = models.CharField(max_length=36, unique=True, blank=True)
     bio = models.TextField(null=True, blank=True)
     avatar = models.ImageField(null=True, default="Avatarwander.png")
+    born = models.DateTimeField(null=True)
 
     def save(self, *args, **kwargs):
         if not self.activation_token:

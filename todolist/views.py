@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .forms import MoneyForm, MoneySearch, EditTodoForm, IsActive, AddTitleForm, UserLoginForm
-from .forms import  TodoTitleForm, UserRegisterForm, EmailForm
+from .forms import  TodoTitleForm, UserRegisterForm, EmailForm, ProfileSettings
+from .forms import ProfileSettingsAvatar, ProfileSettingsAdress
 from .models import Money, TodoList, TitleTodo, User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -223,12 +224,40 @@ def activation_user(request, token):
     return render(request, 'registration/activated_user.html', {'user' : user})
 
 @required_active
-def profile(request):
-    return render(request,'profile.html')
+def profile(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    
+    context = {
+        'user': user
+    }
+    return render(request,'profile.html', context)
 
 @required_active
-def profile_settings(request):
-    return render(request, 'profile_settings.html')
+def profile_settings(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user_form = ProfileSettings(instance=user)
+    user_form_avatar = ProfileSettingsAvatar(instance=user)
+    user_form_adress = ProfileSettingsAdress(instance=user)
+    if request.method == 'POST':
+        user_form = ProfileSettings(data=request.POST, instance=user)
+        user_form_avatar = ProfileSettingsAvatar(request.POST, request.FILES, instance=user)
+        user_form_adress = ProfileSettingsAdress(data=request.POST, instance=user)
+        if user_form.is_valid():
+            user_form.save()
+            return redirect('todolist:profile', user_id=user_id)
+        elif user_form_avatar.is_valid():
+            user_form_avatar.save()
+            return redirect('todolist:profile', user_id=user_id)
+        elif user_form_adress.is_valid():
+            user_form_adress.save()
+            return redirect('todolist:profile', user_id=user_id)
+    context = {
+        'user': user,
+        'user_form': user_form,
+        'user_form_adress' : user_form_adress,
+        'user_form_avatar' : user_form_avatar
+    }
+    return render(request, 'profile_settings.html', context)
 
 #TODO ADD JAVASCRIPT TO SHOW THE MATPLOTLIB FILES
 #TODO ADD SIGNAL TO ADD NEW NOTE EVERY TIME USER DELETE ALL NOTES SO MATPLOTLIB WORK

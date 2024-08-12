@@ -81,3 +81,22 @@ class AddTitleForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if user:
             self.fields['title'].queryset = TitleTodo.objects.filter(user=user)
+
+
+class ProfileSettings(forms.ModelForm):
+    class Meta:
+        model= User
+        fields= [
+            'name', 'last_name',
+        ] 
+
+class ProfileSettingsAdress(forms.ModelForm):
+    class Meta:
+        model= User
+        fields= [
+             'city', 'country',
+        ]
+class ProfileSettingsAvatar(forms.ModelForm):
+    class Meta:
+        model=User
+        fields=['avatar']
