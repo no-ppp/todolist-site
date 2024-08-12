@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .forms import MoneyForm, MoneySearch, EditTodoForm, IsActive, AddTitleForm, UserLoginForm
 from .forms import  TodoTitleForm, UserRegisterForm, EmailForm, ProfileSettings
-from .forms import ProfileSettingsAvatar, ProfileSettingsAdress
+from .forms import ProfileSettingsAvatar, ProfileSettingsAdress, ProfileSettingsBio
 from .models import Money, TodoList, TitleTodo, User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -33,14 +33,15 @@ from django.contrib import messages
 
 def home(request):
     if request.user.is_authenticated:
-        return redirect('todolist:dashboard')
+        user_id = request.user.id
+        return redirect('todolist:dashboard', user_id=user_id)
     
     return render(request, 'home.html')
 
 @required_active
-def dashboard(request):
-
-    return render(request, 'dashboard.html')
+def dashboard(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    return render(request, 'dashboard.html', {'user': user})
 
 #TODO think about making signal which will redirect user after he activate his account via email
 def required_active_view(request):
@@ -60,7 +61,7 @@ def required_active_view(request):
 #--------------------------
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('todolist:dashboard')
+        return redirect('todolist:home')
     user_form = UserLoginForm()
     if request.method == 'POST':
         user_form = UserLoginForm(request.POST)
@@ -90,7 +91,7 @@ def login_view(request):
 
 def register_view(request):
     if request.user.is_authenticated:
-        return redirect('todolist:dashboard')
+        return redirect('todolist:home')
     register_form = UserRegisterForm()
     if request.method == 'POST':
         register_form = UserRegisterForm(request.POST)
@@ -113,11 +114,11 @@ def register_view(request):
 
 def register_completed(request):
     if request.user.is_authenticated:
-        return redirect('todolist:dashboard')
+        return redirect('todolist:home')
     if not request.user.is_authenticated:
         return redirect('todolist:home')
     elif request.user.is_active == True:
-        return redirect('todolist:dashboard')
+        return redirect('todolist:home')
     elif request.user.is_active == False:
         return render(request, 'registration/register_completed.html')
     
@@ -125,7 +126,7 @@ def register_completed(request):
 #TODO display the user email after reset password is sent
 def password_reset_done(request, uidb64):
     if request.user.is_authenticated:
-        return redirect('todolist:dashboard')
+        return redirect('todolist:home')
     context = {
         'uidb64' : uidb64
     }
@@ -136,12 +137,12 @@ def invalid_email(request):
 
 def new_password_invalid(request):
     if request.user.is_authenticated:
-        return redirect('todolist:dashboard')
+        return redirect('todolist:home')
     return render(request, 'registration/new_password_invalid.html')
 
 def password_reset_complete(request):
     if request.user.is_authenticated:
-        return redirect('todolist:dashboard')
+        return redirect('todolist:home')
     return render(request, 'registration/password_reset_complete.html')
 
 
@@ -149,7 +150,7 @@ def password_reset_complete(request):
 def password_reset(request):
     email_form = None
     if request.user.is_authenticated:
-        return redirect('todolist:dashboard')
+        return redirect('todolist:home')
     email = request.session.get('email')
     if email == None:
         email_form = EmailForm()
@@ -238,26 +239,46 @@ def profile_settings(request, user_id):
     user_form = ProfileSettings(instance=user)
     user_form_avatar = ProfileSettingsAvatar(instance=user)
     user_form_adress = ProfileSettingsAdress(instance=user)
+    user_form_bio = ProfileSettingsBio(instance=user)
+
     if request.method == 'POST':
-        user_form = ProfileSettings(data=request.POST, instance=user)
-        user_form_avatar = ProfileSettingsAvatar(request.POST, request.FILES, instance=user)
-        user_form_adress = ProfileSettingsAdress(data=request.POST, instance=user)
-        if user_form.is_valid():
-            user_form.save()
-            return redirect('todolist:profile', user_id=user_id)
-        elif user_form_avatar.is_valid():
-            user_form_avatar.save()
-            return redirect('todolist:profile', user_id=user_id)
-        elif user_form_adress.is_valid():
-            user_form_adress.save()
-            return redirect('todolist:profile', user_id=user_id)
+        if 'update_profile' in request.POST:
+            user_form = ProfileSettings(data=request.POST, instance=user)
+            if user_form.is_valid():
+                user_form.save()
+                return redirect('todolist:profile', user_id=user_id)
+            else:
+                print("Profile form errors:", user_form.errors)
+        elif 'update_avatar' in request.POST or request.FILES:
+            user_form_avatar = ProfileSettingsAvatar(data=request.POST, files=request.FILES, instance=user)
+            if user_form_avatar.is_valid():
+                user_form_avatar.save()
+                return redirect('todolist:profile', user_id=user_id)
+            else:
+                print("Avatar form errors:", user_form_avatar.errors)
+        elif 'update_adress' in request.POST:
+            user_form_adress = ProfileSettingsAdress(data=request.POST, instance=user)
+            if user_form_adress.is_valid():
+                user_form_adress.save()
+                return redirect('todolist:profile', user_id=user_id)
+            else:
+                print("Address form errors:", user_form_adress.errors)
+        elif 'update_bio' in request.POST:
+            user_form_bio = ProfileSettingsBio(data=request.POST, instance=user)
+            if user_form_bio.is_valid():
+                user_form_bio.save()
+                return redirect('todolist:profile', user_id=user_id)
+            else:
+                print("Bio form errors:", user_form_bio.errors)
     context = {
         'user': user,
         'user_form': user_form,
-        'user_form_adress' : user_form_adress,
-        'user_form_avatar' : user_form_avatar
+        'user_form_adress': user_form_adress,
+        'user_form_avatar': user_form_avatar,
+        'user_form_bio': user_form_bio,
     }
     return render(request, 'profile_settings.html', context)
+
 
 #TODO ADD JAVASCRIPT TO SHOW THE MATPLOTLIB FILES
 #TODO ADD SIGNAL TO ADD NEW NOTE EVERY TIME USER DELETE ALL NOTES SO MATPLOTLIB WORK

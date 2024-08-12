@@ -7,7 +7,7 @@
                         <div class="col-lg-4">
                             <div class="card mb-3">
                                 <div class="card-body text-center shadow">
-                                    <img class="rounded-circle mb-3 mt-4 img-fluid" src="{{ user.avatar.url }}" alt="User Avatar" style="box-shadow: 1px 1px 20px rgb(0,25,255); max-width: 250px; width: 250px; height: 250px; object-fit: cover;">
+                                    <img class="rounded-circle mb-3 mt-4 img-fluid" src="{{ user.avatar.url }}" alt="User Avatar" style="box-shadow: 1px 1px 20px rgb(0,25,255); width: 200px; height: 200px; border-radius: 50%; object-fit: cover;">
                                     <div class="mb-3">
                                         <!-- Przyciski otwierające modal -->
                                         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#changePhotoModal">Change Photo</button>
@@ -32,7 +32,7 @@
                                                 <input type="file" name="avatar" accept="image/*" class="form-control" id="avatar">
                                             </div>
                                             <div class="mb-3">
-                                                <button class="btn btn-primary btn-sm" type="submit">Upload</button>
+                                                <button class="btn btn-primary btn-sm" type="submit" name='update_avatar'>Upload</button>
                                             </div>
                                         </form>
                                     </div>
@@ -60,7 +60,7 @@
                                                         <div class="mb-3"><label class="form-label" for="last_name"><strong>Last Name</strong></label>{% render_field user_form.last_name class+="form-control" %}</div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
+                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit" name="update_profile">Save Settings</button></div>
                                             </form>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@
                                                         <div class="mb-3"><label class="form-label"><strong>Country</strong></label>{% render_field user_form_adress.country class+="form-control" %}
                                                     </div>
                                                 </div>
-                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
+                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit" name="update_adress">Save Settings</button></div>
                                             </form>
                                         </div>
                                     </div>
@@ -94,10 +94,11 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <form>
-                                        <div class="mb-3"><label class="form-label" for="signature"><strong>Bio</strong></label><textarea class="form-control" id="signature" rows="4" name="signature" placeholder="Type your Bio Here...."></textarea></div>
+                                    <form method='POST' action=''>
+                                        {% csrf_token %}
+                                        <div class="mb-3"><label class="form-label"><strong>Bio</strong></label>{% render_field user_form_bio.bio class+="form-control" %}</div>
                                         <div class="mb-3"></div>
-                                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
+                                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit" name="update_bio">Save Settings</button></div>
                                     </form>
                                 </div>
                             </div>

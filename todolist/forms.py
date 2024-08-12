@@ -27,7 +27,9 @@ class UserRegisterForm(UserCreationForm):
 class MoneyForm(forms.ModelForm):
     class Meta:
         model = Money
-        fields = '__all__'
+        fields = [
+            'field_info', 'what_info','type_info', 'important_info', 'money_info'
+        ]
 
 
 class MoneySearch(forms.Form):
@@ -100,3 +102,8 @@ class ProfileSettingsAvatar(forms.ModelForm):
     class Meta:
         model=User
         fields=['avatar']
+
+class ProfileSettingsBio(forms.ModelForm):
+    class Meta:
+        model=User
+        fields=['bio']

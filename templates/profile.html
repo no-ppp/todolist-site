@@ -9,7 +9,7 @@
                 <div class="card mb-3">
                     <div class="card-body text-center shadow">
                         
-                        <img class="rounded-circle mb-3 mt-4 img-fluid" src="{{ user.avatar.url }}" alt="User Avatar" style="box-shadow: 1px 1px 20px rgb(0,25,255); max-width: 250px; width: 250px; height: 250px; object-fit: cover;">
+                        <img class="rounded-circle mb-3 mt-4 img-fluid" src="{{ user.avatar.url }}" alt="User Avatar" style="box-shadow: 1px 1px 20px rgb(0,25,255); width: 200px; height: 200px; border-radius: 50%; object-fit: cover;">
                         <div class="mb-3">
                             <a class="btn btn-primary btn-sm" href="{% url 'todolist:profile_settings' user_id=user_id %}">Settings</a>
                         </div>

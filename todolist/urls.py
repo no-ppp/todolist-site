@@ -29,6 +29,6 @@ urlpatterns = [
     path('edit_task/<int:user_id>/<int:todolist_id>', views.edit_task, name='edit_task'),
     path('edit_current_task/<int:user_id>/<int:title_id>/', views.edit_current_task, name='edit_current_task'),
     path('activate/<str:token>/', views.activation_user, name='activate'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/<int:user_id>/', views.dashboard, name='dashboard'),
 ]
 
