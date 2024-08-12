@@ -58,7 +58,7 @@ class TodoList(models.Model):
     task = models.CharField(max_length=20)
     important = models.BooleanField(verbose_name='Is it important ?', default=False)
     active = models.BooleanField(verbose_name="Mark if it's uncompleted", default=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='todolists', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
