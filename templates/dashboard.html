@@ -4,9 +4,7 @@
 
 <body>
                 <div class="container-fluid">
-                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-dark mb-0">Dashboard</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="#" style="background: rgb(46,45,136);"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Generate Report</a>
-                    </div>
+                    
                     <div class="row">
                         <div class="col-md-6 col-xl-3 mb-4"><a class="dashboard_link" href="#">
                                 <div class="card shadow border-left-primary py-2">
@@ -112,77 +110,25 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3"><a class="dashboard_link" href="#">
-                                        <h6 class="text-primary fw-bold m-0">Friends Request</h6>
-                                    </a></div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col me-2">
-                                                <h6 class="mb-0"><strong>Wander Szybki Pies</strong></h6><span class="text-xs">10:30 AM</span>
-                                            </div>
-                                            <div class="col-auto"><a href="#"><i class="fas fa-check" style="font-size: 20px;margin-right: 18px;"></i></a><a href="#"><i class="fas fa-times" style="font-size: 22px;margin-right: 10px;"></i></a><a class="d-inline-block" href="https://www.google.com/"><img src="{% static 'images/avatars/Avatarwander.png' %}" style="width: 60px;height: 60px;border-style: solid;border-color: var(--bs-list-group-active-color);border-radius: 83px;"></a></div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        </div> 
                         <div class="col-lg-6 mb-4">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3"><a class="dashboard_link" href="#">
-                                        <h6 class="text-primary fw-bold m-0">Today Todo</h6>
+                                        <h6 class="text-primary fw-bold m-0">Important tasks</h6>
                                     </a></div>
+                                    
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"></li>
+                                    {% for task in important_tasks_5  %}
                                     <li class="list-group-item">
                                         <div class="row g-0 align-items-center">
                                             <div class="col me-2">
-                                                <h6 class="mb-0"><strong>Spacer</strong></h6><span class="text-xs">6:30&nbsp;</span>
+                                                <h6 class="mb-0"><strong>{{task.task}}</strong></h6><span class="text-xs">{{ task.created_at }}</span>
                                             </div>
-                                            <div class="col-auto"><button class="btn btn-primary btn-lg" type="button" style="width: 35px;height: 35px;background: rgba(78,115,223,0);color: rgba(255,255,255,0);"><i class="far fa-check-circle d-flex justify-content-center align-items-center star-completed" style="color: var(--bs-btn-bg);"></i></button></div>
+                                            
                                         </div>
                                     </li>
-                                    <li class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col me-2">
-                                                <h6 class="mb-0"><strong>Spacer wieczorny</strong></h6><span class="text-xs">20:30&nbsp;</span>
-                                            </div>
-                                            <div class="col-auto"><button class="btn btn-primary btn-lg" type="button" style="width: 35px;height: 35px;background: rgba(78,115,223,0);color: rgba(255,255,255,0);"><i class="far fa-circle d-flex justify-content-center align-items-center star" style="color: var(--bs-btn-bg);"></i></button></div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3"><a class="dashboard_link" href="#">
-                                        <h6 class="text-primary fw-bold m-0">Beam Me Tomorrow Todo</h6>
-                                    </a></div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col me-2">
-                                                <h6 class="mb-0"><strong>Jedzenie</strong></h6><span class="text-xs">6:30</span>
-                                            </div>
-                                            <div class="col-auto"><button class="btn btn-primary btn-lg" type="button" style="width: 35px;height: 35px;background: rgba(78,115,223,0);color: rgba(255,255,255,0);"><i class="far fa-circle d-flex justify-content-center align-items-center star" style="color: var(--bs-btn-bg);"></i></button></div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col me-2">
-                                                <h6 class="mb-0"><strong>Spacer</strong></h6><span class="text-xs">8:30&nbsp;</span>
-                                            </div>
-                                            <div class="col-auto"><button class="btn btn-primary btn-lg" type="button" style="width: 35px;height: 35px;background: rgba(78,115,223,0);color: rgba(255,255,255,0);"><i class="far fa-check-circle d-flex justify-content-center align-items-center star-completed" style="color: var(--bs-btn-bg);"></i></button></div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col me-2">
-                                                <h6 class="mb-0"><strong>Głaskanie</strong></h6><span class="text-xs">20:30&nbsp;</span>
-                                            </div>
-                                            <div class="col-auto"><button class="btn btn-primary btn-lg" type="button" style="width: 35px;height: 35px;background: rgba(78,115,223,0);color: rgba(255,255,255,0);"><i class="far fa-check-circle d-flex justify-content-center align-items-center star-completed" style="color: var(--bs-btn-bg);"></i></button></div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                    {% endfor %}
+                                
                             </div>
                         </div>
                     </div>

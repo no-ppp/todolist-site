@@ -68,13 +68,17 @@ def dashboard(request, user_id):
     percent_of_active_todo = (unactive_tasks * 100 // total_tasks) if unactive_tasks else 0
 
     #important tasks
-    important_tasks_count = TodoList.objects.filter(user_id=user_id, important=True).count()
+    important_tasks = TodoList.objects.filter(user_id=user_id, important=True)
+    important_tasks_active = important_tasks.filter(active=True)
+    important_tasks_5 = important_tasks_active.order_by('-created_at')[:5]
+    important_tasks_count = important_tasks.count()
     if important_tasks_count < 1:
         important_tasks_count = 0
 
     #% of important tasks
     all_tasks = TodoList.objects.filter(user_id=user_id).count()
     percent_of_important_tasks = (important_tasks_count * 100 // all_tasks) if all_tasks else 0
+
         
     '''MATPLOTLIB CHARTS'''
     earnings_to_billings_plot = generate_pie(money_earnings.count(), 
@@ -85,6 +89,7 @@ def dashboard(request, user_id):
 
     context = {'sum_of_earnings_month': sum_of_earnings_month,
                'user': user,
+               'important_tasks_5': important_tasks_5,
                'billing_this_month': billing_this_month,
                'real_earnings_this_month': real_earnings_this_month,
                'percent_of_active_todo': percent_of_active_todo,
