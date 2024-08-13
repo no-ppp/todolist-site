@@ -5,7 +5,7 @@ from .forms import ProfileSettingsAvatar, ProfileSettingsAdress, ProfileSettings
 from .models import Money, TodoList, TitleTodo, User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Sum
 from django.utils.timezone import make_aware
 from datetime import datetime, date, timedelta
 from .matplotlib_view import generate_plot, generate_pie, generate_pie_task
@@ -41,7 +41,61 @@ def home(request):
 @required_active
 def dashboard(request, user_id):
     user = get_object_or_404(User, id=user_id)
-    return render(request, 'dashboard.html', {'user': user})
+    #filter money earnings by user_id
+    money_earnings = Money.objects.filter(user_id=user_id, type_info='earnings')
+    #creating a start and end of month
+    today = date.today()
+    start_of_month = today.replace(day=1)
+    end_of_month = today.replace(day=1, month=today.month % 12 + 1) - timedelta(days=1)
+    #filter money earnings by user_id and in this month
+    earnings_month = money_earnings.filter(
+        created_at__gte=start_of_month, created_at__lte=end_of_month
+    )
+    sum_of_earnings_month = earnings_month.aggregate(Sum('money_info'))['money_info__sum'] or 0
+    #creating real earnings this month by subtracting earnings from bills
+    money_billings = Money.objects.filter(user_id=user_id, type_info='billings')
+    billing_this_month = money_billings.filter(
+        created_at__gte=start_of_month, created_at__lte=end_of_month
+    ).aggregate(Sum('money_info'))['money_info__sum'] or 0
+    real_earnings_this_month = sum_of_earnings_month - billing_this_month
+    percent_of_earnings_to_bills = (real_earnings_this_month * 100 // sum_of_earnings_month) if sum_of_earnings_month else 0
+    percent_of_billings_to_earnings = 100 - percent_of_earnings_to_bills
+
+    # percent of completed tasks
+    active_tasks = TodoList.objects.filter(user_id=user_id, active=True).count()
+    unactive_tasks = TodoList.objects.filter(user_id=user_id, active=False).count()
+    total_tasks = active_tasks + unactive_tasks
+    percent_of_active_todo = (unactive_tasks * 100 // total_tasks) if unactive_tasks else 0
+
+    #important tasks
+    important_tasks_count = TodoList.objects.filter(user_id=user_id, important=True).count()
+    if important_tasks_count < 1:
+        important_tasks_count = 0
+
+    #% of important tasks
+    all_tasks = TodoList.objects.filter(user_id=user_id).count()
+    percent_of_important_tasks = (important_tasks_count * 100 // all_tasks) if all_tasks else 0
+        
+    '''MATPLOTLIB CHARTS'''
+    earnings_to_billings_plot = generate_pie(money_earnings.count(), 
+                                             money_billings.count(),
+                                             'Billings',
+                                             'Earnings')
+
+
+    context = {'sum_of_earnings_month': sum_of_earnings_month,
+               'user': user,
+               'billing_this_month': billing_this_month,
+               'real_earnings_this_month': real_earnings_this_month,
+               'percent_of_active_todo': percent_of_active_todo,
+               'earnings_to_billings_plot': earnings_to_billings_plot,
+               'important_tasks_count': important_tasks_count,
+               'percent_of_earnings_to_bills': percent_of_earnings_to_bills,
+               'percent_of_billings_to_earnings': percent_of_billings_to_earnings,
+               'percent_of_important_tasks': percent_of_important_tasks,}
+    
+
+    return render(request, 'dashboard.html', context)
 
 #TODO think about making signal which will redirect user after he activate his account via email
 def required_active_view(request):
@@ -335,7 +389,7 @@ def todo_view(request, user_id):
     #generating plt_pie from matplotlib_view.py
     active = todolist.filter(active=True).count()
     not_active = todolist.filter(active=False).count()
-    plot_path_pie = generate_pie(active, not_active)
+    plot_path_pie = generate_pie(active, not_active,'Active Tasks', 'Completed Tasks')
     #generating plt_pie_task from matplotlib_view.py
     title_task_count = []
     for title in titles:

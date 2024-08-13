@@ -63,11 +63,11 @@ def generate_plot(x, y, label: str, title: str, xlabel: str, ylabel: str):
     return converted_plot
 
 
-def generate_pie(active, not_active):
+def generate_pie(active, not_active, label_x, label_y):
     plt.switch_backend('AGG')
     plt.figure(figsize=(8, 6))
     sizes = [active, not_active]
-    labels = ['Active Tasks', 'Completed Tasks']
+    labels = [label_x, label_y]
     colors = ['#3498db', '#4CAF50']  # White, Green
     plt.pie(sizes, explode=(0.1, 0), labels=labels, colors=colors,
             autopct='%1.1f%%', shadow=True, startangle=140)
