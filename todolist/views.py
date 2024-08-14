@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
-from .forms import MoneyForm, MoneySearch, EditTodoForm, IsActive, AddTitleForm, UserLoginForm
-from .forms import  TodoTitleForm, UserRegisterForm, EmailForm, ProfileSettings
-from .forms import ProfileSettingsAvatar, ProfileSettingsAdress, ProfileSettingsBio
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import (
+    MoneyForm, MoneySearch, EditTodoForm, IsActive, AddTitleForm, UserLoginForm,
+    TodoTitleForm, UserRegisterForm, EmailForm, ProfileSettings,
+    ProfileSettingsAvatar, ProfileSettingsAdress, ProfileSettingsBio
+)
 from .models import Money, TodoList, TitleTodo, User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -11,7 +13,7 @@ from datetime import datetime, date, timedelta
 from .matplotlib_view import generate_plot, generate_pie, generate_pie_task
 from django.utils.timezone import timezone
 import calendar
-from django.contrib.auth import login as auth_login, authenticate , get_user_model, logout
+from django.contrib.auth import login as auth_login, authenticate, get_user_model, logout
 from django.http import HttpResponse
 from Google import create_message, send_message, sending_message
 from django.conf import settings
@@ -19,17 +21,9 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth.decorators import login_required
 from .decorators import required_active
 from django.urls import reverse
 from django.contrib import messages
-
-
-
-
-
-
-
 
 def home(request):
     if request.user.is_authenticated:
@@ -81,10 +75,13 @@ def dashboard(request, user_id):
 
         
     '''MATPLOTLIB CHARTS'''
-    earnings_to_billings_plot = generate_pie(money_earnings.count(), 
+    if money_earnings.count() > 0 and money_billings.count() > 0:
+        earnings_to_billings_plot = generate_pie(money_earnings.count(), 
                                              money_billings.count(),
                                              'Billings',
                                              'Earnings')
+    else:
+        earnings_to_billings_plot = None
 
 
     context = {'sum_of_earnings_month': sum_of_earnings_month,
@@ -128,8 +125,8 @@ def login_view(request):
             email = user_form.cleaned_data['email']
             password = user_form.cleaned_data['password']
             if User.objects.filter(email=email, is_user_password_set=False):
-                    request.session['email'] = email #<-- Taking the key:value email to next function
-                    return redirect('todolist:password_reset_email')
+                request.session['email'] = email #<-- Taking the key:value email to next function
+                return redirect('todolist:password_reset_email')
             else:
                 user = authenticate(request, email=email, password=password)
             if user is not None:
@@ -151,22 +148,23 @@ def login_view(request):
 def register_view(request):
     if request.user.is_authenticated:
         return redirect('todolist:home')
+    
     register_form = UserRegisterForm()
+    
     if request.method == 'POST':
         register_form = UserRegisterForm(request.POST)
         if register_form.is_valid():
             user = register_form.save()
             password = register_form.cleaned_data['password1']
-            password2 = register_form.cleaned_data['password2']
             user = authenticate(request, email=user.email, password=password)
             if user is not None:
                 user.is_user_password_set = True
                 user.save()
                 auth_login(request, user)
                 return redirect('todolist:register_completed')
-        
+    
     context = {
-        'register_form' : register_form
+        'register_form': register_form
     }
     return render(request, 'registration/register.html', context)
 
@@ -386,21 +384,26 @@ def todo_view(request, user_id):
 
         ).count()
         task_count.append(active_changes)
-    plot_path = generate_plot(range(1,num_days+1),
-                               task_count,
-                                 'Tasks completed',
-                                 '',
-                                 'Days','Tasks')
-    #generating plt_pie from matplotlib_view.py
-    active = todolist.filter(active=True).count()
-    not_active = todolist.filter(active=False).count()
-    plot_path_pie = generate_pie(active, not_active,'Active Tasks', 'Completed Tasks')
-    #generating plt_pie_task from matplotlib_view.py
-    title_task_count = []
-    for title in titles:
-        count = todolist.filter(title=title).count()
-        title_task_count.append(count)
-    plot_path_pie_task = generate_pie_task(title_task_count, titles)
+    if todolist.exists():
+        plot_path = generate_plot(range(1,num_days+1),
+                                task_count,
+                                    'Tasks completed',
+                                    '',
+                                    'Days','Tasks')
+        #generating plt_pie from matplotlib_view.py
+        active = todolist.filter(active=True).count()
+        not_active = todolist.filter(active=False).count()
+        plot_path_pie = generate_pie(active, not_active,'Active Tasks', 'Completed Tasks')
+        #generating plt_pie_task from matplotlib_view.py
+        title_task_count = []
+        for title in titles:
+            count = todolist.filter(title=title).count()
+            title_task_count.append(count)
+        plot_path_pie_task = generate_pie_task(title_task_count, titles)
+    else:
+        plot_path = None
+        plot_path_pie = None
+        plot_path_pie_task = None
 
     context = {
         'title_task_map' : title_task_map,

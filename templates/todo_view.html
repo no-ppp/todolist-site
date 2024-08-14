@@ -85,9 +85,13 @@
                                         
                                     </div>
                                 </div>
+                                {% if plot_path is not None %}
                                 <div class="card-body">
                                     <img src="data:image/png;base64,{{ plot_path }}" alt="Wykres" style="max-width: 100%; height: auto;"> </img>
                                 </div>
+                                {% else %}
+                                <p> No data to display </p>
+                                {% endif %}
                             </div>
                             <div class="card mb-3"></div>
                             <div class="card shadow mb-4">
@@ -97,9 +101,13 @@
                                         
                                     </div>
                                 </div>
+                                {% if plot_path_pie is not None %}
                                 <div class="card-body">
                                     <img src="data:image/png;base64,{{ plot_path_pie }}" style="max-width: 100%; height: auto;"> </img>
                                 </div>
+                                {% else %}
+                                <p> No data to display </p>
+                                {% endif %}
                             </div>
                             <div class="card mb-3"></div>
                             <div class="card shadow mb-4">
@@ -109,9 +117,13 @@
                                         
                                     </div>
                                 </div>
+                                {% if plot_path_pie_task is not None %}
                                 <div class="card-body">
                                     <img src="data:image/png;base64,{{ plot_path_pie_task }}" alt="Wykres" style="max-width: 100%; height: auto;"> </img>
                                 </div>
+                                {% else %}
+                                <p> No data to display </p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

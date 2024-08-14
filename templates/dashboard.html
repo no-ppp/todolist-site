@@ -78,7 +78,11 @@
                                     
                                 </div>
                                 <div class="card-body">
-                                    <img src="data:image/png;base64,{{ earnings_to_billings_plot }}" alt="Wykres" style="max-width: 100%; height: auto;"> </img>
+                                    {% if earnings_to_billings_plot is not None %}
+                                    <img src="data:image/png;base64,{{ earnings_to_billings_plot }}" alt="Wykres" style="max-width: 100%; height: auto;">
+                                    {% else %}
+                                    <p> Start adding earnings and bills to see the plot </p>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
