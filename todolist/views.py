@@ -101,6 +101,8 @@ def dashboard(request, user_id):
 
 #TODO think about making signal which will redirect user after he activate his account via email
 def required_active_view(request):
+    if request.user.is_authenticated:
+        return redirect('todolist:home')
     return render(request, 'registration/required_active.html')
 
 #TODO 
@@ -190,6 +192,8 @@ def password_reset_done(request, uidb64):
     return render(request, 'registration/password_reset_done.html', context)
 
 def invalid_email(request):
+    if request.user.is_authenticated:
+        return redirect('todolist:home')
     return render(request, 'registration/invalid_email.html')
 
 def new_password_invalid(request):
