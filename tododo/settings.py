@@ -114,6 +114,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Media files
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+# Add this to your settings.py
+WHITENOISE_USE_FINDERS = True
 # Serve media files with WhiteNoise
 WHITENOISE_MEDIA_PREFIX = MEDIA_URL
 
