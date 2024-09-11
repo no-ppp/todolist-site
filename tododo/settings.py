@@ -116,7 +116,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 AUTH_USER_MODEL = 'todolist.User'
 
 # Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'    
 
 #CUSTOM BACKEND FOR THE --> email login  --> allauth
 AUTHENTICATION_BACKENDS = [
