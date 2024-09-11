@@ -52,8 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",     #<-- django-allauth middleware
 ]
-# Serve media files with WhiteNoise
-WHITENOISE_MEDIA_PREFIX = MEDIA_URL
+
 
 ROOT_URLCONF = 'tododo.urls'
 
@@ -115,6 +114,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Media files
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+# Serve media files with WhiteNoise
+WHITENOISE_MEDIA_PREFIX = MEDIA_URL
 
 # Custom user model
 AUTH_USER_MODEL = 'todolist.User'
