@@ -52,6 +52,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",     #<-- django-allauth middleware
 ]
+# Serve media files with WhiteNoise
+WHITENOISE_MEDIA_PREFIX = MEDIA_URL
 
 ROOT_URLCONF = 'tododo.urls'
 
